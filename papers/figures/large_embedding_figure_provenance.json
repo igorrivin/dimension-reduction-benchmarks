@@ -1,0 +1,906 @@
+{
+  "arxiv_category_layouts": {
+    "background_index_sha256": "285d3a8600e11787600fb8a4b9ee7a0ef4c96eeb482a9ee353903e745632a83f",
+    "background_rows": 30000,
+    "background_rule": "uniform sample excluding the 12 highlighted categories",
+    "background_seed": 1730,
+    "balanced_selection_seed": 1729,
+    "colored_draw_order_sha256": "297150c64d38061b3d45f24d9cdbb2d334110973b8137827f995f0fe630ee69c",
+    "colored_index_sha256": "d3962f4bae9de8beac621517a267be1b84a04e768b1c8b8683a0800becb60a7c",
+    "interpretation_limit": "the d=8 row uses an independent unsupervised PCA fit for each method; orientation and visible 2-D separation are not cross-method scores",
+    "labels": {
+      "d2": {
+        "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d2/n723457/labels.npy",
+        "sha256": "b092e237f827eb44dc704e71995776e3c7ce7fc454dd2d67fdc94cc85fd471aa"
+      },
+      "d8": {
+        "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d8/n723457/labels.npy",
+        "sha256": "b092e237f827eb44dc704e71995776e3c7ce7fc454dd2d67fdc94cc85fd471aa"
+      }
+    },
+    "layout_records": {
+      "d2": {
+        "autoencoder": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d2/n723457/autoencoder-d2-s0-layout.npy",
+          "sha256": "b87c84950eaa20b1dfc3f01fbfeb2526992e8d97c54014c151d083b5f3f4c6ac",
+          "view_center": [
+            1.3084520101547241,
+            1.346257209777832
+          ],
+          "view_quantile": 0.995,
+          "view_radius": 27.4494422444344
+        },
+        "dire": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d2/n723457/dire-d2-s0-layout.npy",
+          "sha256": "52e8f421cea48a3a0762e2324282fa5a602173e4e61342bacb860d5b24bd86f7",
+          "view_center": [
+            0.2997726798057556,
+            -0.09130976349115372
+          ],
+          "view_quantile": 0.995,
+          "view_radius": 2.6517350113391895
+        },
+        "umap": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d2/n723457/umap-d2-s0-layout.npy",
+          "sha256": "dc8853e072b1ea16a8e054e0f66fd395f8a9e3ed9357255e881034f239b42a3a",
+          "view_center": [
+            -0.5840944349765778,
+            -0.3848548084497452
+          ],
+          "view_quantile": 0.995,
+          "view_radius": 11.015870436024667
+        }
+      },
+      "d8": {
+        "autoencoder": {
+          "explained_variance_ratio": [
+            0.49067387437914317,
+            0.21311651546987959
+          ],
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d8/n723457/autoencoder-d8-s0-layout.npy",
+          "pca_components": [
+            [
+              -0.03818188344164962,
+              -0.021744859557362488
+            ],
+            [
+              -0.5970566637717336,
+              -0.23855509760336804
+            ],
+            [
+              0.19157869356527552,
+              -0.4474977426308547
+            ],
+            [
+              0.6462485070947237,
+              0.23982506844646648
+            ],
+            [
+              0.0704480302542822,
+              0.13965301531880966
+            ],
+            [
+              0.12223025779994003,
+              -0.10198297513175054
+            ],
+            [
+              -0.3498230704378251,
+              0.7635077956440195
+            ],
+            [
+              0.21318211410243354,
+              0.26832943830609945
+            ]
+          ],
+          "sha256": "5e9471b2bfdbce688be2394e6d368d2ad5323c1d9490a734bd344a44edc1b005",
+          "view_center": [
+            0.3498938355415771,
+            0.1392647718532724
+          ],
+          "view_quantile": 0.995,
+          "view_radius": 7.611429794005753
+        },
+        "dire": {
+          "explained_variance_ratio": [
+            0.37247870168545966,
+            0.26760453249255894
+          ],
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d8/n723457/dire-d8-s0-layout.npy",
+          "pca_components": [
+            [
+              0.24273383822778088,
+              0.41959835320205474
+            ],
+            [
+              0.5086055630355001,
+              -0.188713037880197
+            ],
+            [
+              -0.41008917546503476,
+              0.25350738749434837
+            ],
+            [
+              -0.17417977179872832,
+              0.38325420495170903
+            ],
+            [
+              0.44922840841532496,
+              0.18829502696855838
+            ],
+            [
+              -0.3175762625793854,
+              0.47999750696260457
+            ],
+            [
+              -0.37854118003830417,
+              -0.4347926356861859
+            ],
+            [
+              0.19476824644960272,
+              0.34968209888186724
+            ]
+          ],
+          "sha256": "33035abdaed1af03e9dfdc00e896bdb3ad202542f5769cb05c4a48c7f247ef64",
+          "view_center": [
+            -0.18742131182923266,
+            0.4375546389073809
+          ],
+          "view_quantile": 0.995,
+          "view_radius": 3.9828006312562048
+        },
+        "umap": {
+          "explained_variance_ratio": [
+            0.6224274256921224,
+            0.1743062263408039
+          ],
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d8/n723457/umap-d8-s0-layout.npy",
+          "pca_components": [
+            [
+              0.024096386283438916,
+              0.29616580133114634
+            ],
+            [
+              0.012168605699252407,
+              0.041508211386324975
+            ],
+            [
+              0.054016591941546635,
+              0.17944119629243202
+            ],
+            [
+              0.04952266642910009,
+              0.05460361742333769
+            ],
+            [
+              -0.10397900103012928,
+              0.7895853249084838
+            ],
+            [
+              -0.42138362494389664,
+              0.02519137506785759
+            ],
+            [
+              0.05261361513646809,
+              0.49861373251155017
+            ],
+            [
+              0.89596708532422,
+              0.0518357367948983
+            ]
+          ],
+          "sha256": "c2b593ce04a092188c08bcd01aed2f6840ddc51c11b36cbe427ff26a07d792f7",
+          "view_center": [
+            -0.707977277658585,
+            -0.1714053216009265
+          ],
+          "view_quantile": 0.995,
+          "view_radius": 7.072082010898366
+        }
+      }
+    },
+    "output_sha256": {
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_arxiv_category_layouts.pdf": "2d41d5338a2400af32a715634daaf13a90a734551a9a7a7c318f1db3400764c9",
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_arxiv_category_layouts.png": "7932a8ec2c9a00f6351d550a4105b4fb1b80823196b440e3ba69db3fa2c4ca55"
+    },
+    "outputs": [
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_arxiv_category_layouts.pdf",
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_arxiv_category_layouts.png"
+    ],
+    "pca_fit_index_sha256": "f0e5fa97a266a0653af59eb0d0464d2820b24619ab87bcdf260af35c3225a508",
+    "pca_fit_rule": "uniform 100,000-row sample, identical for all d=8 methods",
+    "pca_fit_seed": 1731,
+    "plotted_per_label": {
+      "cs.IT": 1500,
+      "math-ph": 1500,
+      "math.AG": 1500,
+      "math.AP": 1500,
+      "math.CO": 1500,
+      "math.DG": 1500,
+      "math.DS": 1500,
+      "math.FA": 1500,
+      "math.NA": 1500,
+      "math.NT": 1500,
+      "math.OC": 1500,
+      "math.PR": 1500
+    },
+    "selected_label_counts": {
+      "cs.IT": 35660,
+      "math-ph": 31280,
+      "math.AG": 37615,
+      "math.AP": 54399,
+      "math.CO": 49892,
+      "math.DG": 30224,
+      "math.DS": 24148,
+      "math.FA": 21333,
+      "math.NA": 32506,
+      "math.NT": 34923,
+      "math.OC": 35445,
+      "math.PR": 40922
+    },
+    "selection_applies_to_target_dimensions": [
+      2,
+      8
+    ],
+    "selection_rule": "12 largest primary categories by count; lexical tie-break"
+  },
+  "figure_seed": 1729,
+  "label_preservation_metrics": {
+    "output_sha256": {
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_label_preservation_metrics.pdf": "12590badb61209067a6cecc105d73d3693f0cd8f744355bd54f53bd655b92920",
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_label_preservation_metrics.png": "114009889005c0cb3a82b3c38c947f1a26a945f7e7d4440a470321b4b2e9de64"
+    },
+    "outputs": [
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_label_preservation_metrics.pdf",
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_label_preservation_metrics.png"
+    ],
+    "panels": {
+      "category_knn_accuracy": {
+        "d2": {
+          "autoencoder": {
+            "mean": 0.36282578875171473,
+            "sample_sd": 0.006693834463629343,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.36934156378600824,
+              0.3559670781893004,
+              0.3631687242798354
+            ]
+          },
+          "dire": {
+            "mean": 0.3768861454046639,
+            "sample_sd": 0.0056662248428869235,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.3765432098765432,
+              0.38271604938271603,
+              0.3713991769547325
+            ]
+          },
+          "umap": {
+            "mean": 0.48216735253772286,
+            "sample_sd": 0.027031065019120087,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.45164609053497945,
+              0.49176954732510286,
+              0.5030864197530864
+            ]
+          }
+        },
+        "d8": {
+          "autoencoder": {
+            "mean": 0.5089163237311385,
+            "sample_sd": 0.0033071504667328603,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.5051440329218106,
+              0.5102880658436214,
+              0.5113168724279835
+            ]
+          },
+          "dire": {
+            "mean": 0.5308641975308642,
+            "sample_sd": 0.0017819452752766305,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.529835390946502,
+              0.5329218106995884,
+              0.529835390946502
+            ]
+          },
+          "umap": {
+            "mean": 0.6087105624142661,
+            "sample_sd": 0.0011879635168510444,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.6100823045267489,
+              0.6080246913580247,
+              0.6080246913580247
+            ]
+          }
+        }
+      },
+      "group_neighbor_hit_rate": {
+        "d2": {
+          "autoencoder": {
+            "mean": 0.04997121473805411,
+            "sample_sd": 0.005354987198265277,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.055267702936096716,
+              0.04455958549222798,
+              0.05008635578583765
+            ]
+          },
+          "dire": {
+            "mean": 0.28762233736327,
+            "sample_sd": 0.00019943014479777542,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.2877374784110535,
+              0.2877374784110535,
+              0.28739205526770295
+            ]
+          },
+          "umap": {
+            "mean": 0.4979850316637881,
+            "sample_sd": 0.004441520212316823,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.5012089810017271,
+              0.4929188255613126,
+              0.4998272884283247
+            ]
+          }
+        },
+        "d8": {
+          "autoencoder": {
+            "mean": 0.28324697754749567,
+            "sample_sd": 0.006303380860412681,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.28635578583765114,
+              0.28739205526770295,
+              0.275993091537133
+            ]
+          },
+          "dire": {
+            "mean": 0.5699481865284974,
+            "sample_sd": 0.0011965808687867806,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.5713298791018998,
+              0.5692573402417962,
+              0.5692573402417962
+            ]
+          },
+          "umap": {
+            "mean": 0.7541738629821532,
+            "sample_sd": 0.0031151984475460744,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.7544041450777202,
+              0.7509499136442142,
+              0.7571675302245251
+            ]
+          }
+        }
+      },
+      "group_neighbor_purity": {
+        "d2": {
+          "autoencoder": {
+            "mean": 0.005555555555555556,
+            "sample_sd": 0.0005589550152311854,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.005764248704663213,
+              0.004922279792746114,
+              0.00598013816925734
+            ]
+          },
+          "dire": {
+            "mean": 0.13649971214738055,
+            "sample_sd": 0.0023832410782198975,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.13745682210708118,
+              0.13825561312607945,
+              0.133786701208981
+            ]
+          },
+          "umap": {
+            "mean": 0.20140328151986184,
+            "sample_sd": 0.0019177741966700272,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.20110103626943004,
+              0.1996545768566494,
+              0.20345423143350605
+            ]
+          }
+        },
+        "d8": {
+          "autoencoder": {
+            "mean": 0.07055267702936097,
+            "sample_sd": 0.00020594542344924997,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.07053108808290155,
+              0.07076856649395509,
+              0.07035837651122626
+            ]
+          },
+          "dire": {
+            "mean": 0.30600172711571677,
+            "sample_sd": 0.0003682798382822022,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.3061096718480138,
+              0.30630397236614854,
+              0.3055915371329879
+            ]
+          },
+          "umap": {
+            "mean": 0.40988773747841106,
+            "sample_sd": 0.001570660768797825,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.40824697754749567,
+              0.4113773747841105,
+              0.41003886010362695
+            ]
+          }
+        }
+      },
+      "group_neighbor_recall": {
+        "d2": {
+          "autoencoder": {
+            "mean": 0.006370205627545869,
+            "sample_sd": 0.0008717169307643041,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.006614900643398052,
+              0.005402291049959444,
+              0.007093425189280111
+            ]
+          },
+          "dire": {
+            "mean": 0.14061780364457396,
+            "sample_sd": 0.0024722461264068385,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.14135557447733613,
+              0.1426371752408022,
+              0.13786066121558352
+            ]
+          },
+          "umap": {
+            "mean": 0.23565639519439172,
+            "sample_sd": 0.002370399263259157,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.23480972922682766,
+              0.23382558527636246,
+              0.23833387107998502
+            ]
+          }
+        },
+        "d8": {
+          "autoencoder": {
+            "mean": 0.07931863952589342,
+            "sample_sd": 0.00025086126296944896,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.0791337955845728,
+              0.07960420887882028,
+              0.07921791411428716
+            ]
+          },
+          "dire": {
+            "mean": 0.34545290329832645,
+            "sample_sd": 0.0007509469011685383,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.3453323039462936,
+              0.34625685147705876,
+              0.344769554471627
+            ]
+          },
+          "umap": {
+            "mean": 0.5299770738760375,
+            "sample_sd": 0.0017616010572789036,
+            "seeds": [
+              0,
+              1,
+              2
+            ],
+            "values": [
+              0.5279505449453635,
+              0.5311424029817812,
+              0.530838273700968
+            ]
+          }
+        }
+      }
+    },
+    "points": "one point per reducer/training seed; circles are d=2, triangles are d=8, and the corresponding horizontal segments are means",
+    "results": {
+      "arxiv": {
+        "d2": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d2/results.json",
+          "sha256": "28691e31f274a1fcce0b84b173d4169e0f2d13725ae747a6b3f49726a93addfe"
+        },
+        "d8": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-arxiv-d8/results.json",
+          "sha256": "cd34df92eeaf4fb52c2f96132fc84656fb39d9b0e9b3642db6d24531fbeaf524"
+        }
+      },
+      "wikipedia": {
+        "d2": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d2/results.json",
+          "sha256": "b6b99a6e111ddef4017301f79e765969a8147b1a1fb28595d172f8cc8c876377"
+        },
+        "d8": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8/results.json",
+          "sha256": "022ee30845f7301972644da601bba3feef0ac2eda269f125ebd1cc155a6668a5"
+        }
+      }
+    },
+    "wikipedia_recall_definition": "mean same-article hits divided by min(16, article paragraph count minus one)"
+  },
+  "reducer_seed": 0,
+  "schema_version": 2,
+  "script": "/home/igor/devel/dimension-reduction-benchmarks/experiments/plot_large_embedding_labels.py",
+  "script_sha256": "7bb365808f84646cb040e19c32db9b7061d94fa7749794ba3f893dd6b9f31788",
+  "versions": {
+    "matplotlib": "3.11.0",
+    "numpy": "2.4.6"
+  },
+  "wikipedia_article_layouts": {
+    "background_index_sha256": "1d97285fbe27a587f3275eb59225270a768cbd302209e2a5fd302c1ed3f6a767",
+    "background_rule": "uniform 30,000-row sample excluding highlighted articles",
+    "hash_salt": "dire-evoc-wikipedia-article-figure-v1",
+    "interpretation_limit": "the d=8 row uses an independent unsupervised PCA fit for each method; orientation and visible 2-D separation are not cross-method scores; native-layout article retrieval remains the quantitative test",
+    "labels": {
+      "d2": {
+        "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d2/n1000000/labels.npy",
+        "sha256": "01a1e7deb6c431397b489f32a5bb65799bf1030526459cf6bd0889c1075ef6e3"
+      },
+      "d8": {
+        "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8/n1000000/labels.npy",
+        "sha256": "01a1e7deb6c431397b489f32a5bb65799bf1030526459cf6bd0889c1075ef6e3"
+      }
+    },
+    "layout_records": {
+      "d2": {
+        "autoencoder": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d2/n1000000/autoencoder-d2-s0-layout.npy",
+          "sha256": "d102b918468f74ed1d4c941c1f3564997c1dcaff02ae896e58c0bc3db6a50f18",
+          "view_center": [
+            0.027698498219251633,
+            0.18628564476966858
+          ],
+          "view_quantile": 0.997,
+          "view_radius": 134.5566545186126
+        },
+        "dire": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d2/n1000000/dire-d2-s0-layout.npy",
+          "sha256": "65867281d864dc2b29e8c6607babb0233645165a74f9afdd50fdb327f53932d8",
+          "view_center": [
+            -0.004974340554326773,
+            0.03936540335416794
+          ],
+          "view_quantile": 0.997,
+          "view_radius": 2.2887318222749236
+        },
+        "umap": {
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d2/n1000000/umap-d2-s0-layout.npy",
+          "sha256": "7972d54a36776365806442a4df1021debef7217e9e04eb06e2ed74f2f12281b2",
+          "view_center": [
+            0.09388900548219681,
+            -0.1646478772163391
+          ],
+          "view_quantile": 0.997,
+          "view_radius": 14.009963396463396
+        }
+      },
+      "d8": {
+        "autoencoder": {
+          "explained_variance_ratio": [
+            0.3669874034338921,
+            0.20321401872091138
+          ],
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8/n1000000/autoencoder-d8-s0-layout.npy",
+          "pca_components": [
+            [
+              0.29675454763631487,
+              0.635314367266633
+            ],
+            [
+              -0.09882913256011759,
+              -0.02319963864988206
+            ],
+            [
+              0.5879459383793662,
+              -0.3081263374117549
+            ],
+            [
+              0.24475280903044852,
+              0.53381993986401
+            ],
+            [
+              -0.36715290715665033,
+              0.2386281020966156
+            ],
+            [
+              -0.09926535318261152,
+              0.3955244658834085
+            ],
+            [
+              0.13886478497204638,
+              -0.0491664220917675
+            ],
+            [
+              0.5767554776056412,
+              -0.011469621790651174
+            ]
+          ],
+          "sha256": "28eb3cbce1f6a969d558bf0b6b14e50dfb9452f26a40da42fd05596fcfe04ede",
+          "view_center": [
+            -0.5904400474615642,
+            0.3577507641954164
+          ],
+          "view_quantile": 0.997,
+          "view_radius": 20.102835662252474
+        },
+        "dire": {
+          "explained_variance_ratio": [
+            0.21724948255372242,
+            0.15734251022410312
+          ],
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8/n1000000/dire-d8-s0-layout.npy",
+          "pca_components": [
+            [
+              0.6368862178700916,
+              0.06267789159369948
+            ],
+            [
+              -0.09779006073431708,
+              0.1703771332928325
+            ],
+            [
+              0.5094799502641068,
+              -0.12764123690113427
+            ],
+            [
+              0.25202416049662374,
+              -0.4632291944882512
+            ],
+            [
+              0.4530034659578403,
+              0.371353681044982
+            ],
+            [
+              -0.20868818962281666,
+              -6.952639729518762e-05
+            ],
+            [
+              -0.08278048418404374,
+              0.5898947104177439
+            ],
+            [
+              0.0781763589197868,
+              0.500290127559986
+            ]
+          ],
+          "sha256": "a2e9df12a434ba244844ec3b0e123541c1f3c094709fb7abaa7e7566da981cad",
+          "view_center": [
+            -0.03547440972967004,
+            -0.06315515560507148
+          ],
+          "view_quantile": 0.997,
+          "view_radius": 3.0565311643576596
+        },
+        "umap": {
+          "explained_variance_ratio": [
+            0.6180197439854765,
+            0.1253209836254594
+          ],
+          "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8/n1000000/umap-d8-s0-layout.npy",
+          "pca_components": [
+            [
+              -0.10984096546058773,
+              -0.10178613245245986
+            ],
+            [
+              -0.017968678406651624,
+              -0.06892275761196759
+            ],
+            [
+              -0.03187664229298524,
+              -0.4633791584573237
+            ],
+            [
+              -0.0848793441270354,
+              -0.45570417798694135
+            ],
+            [
+              0.04549429009199318,
+              0.13670716300923025
+            ],
+            [
+              0.009814347444170089,
+              0.6841525807938211
+            ],
+            [
+              0.09896087634050116,
+              -0.2700850371511576
+            ],
+            [
+              0.9835812923327105,
+              -0.052944923064820924
+            ]
+          ],
+          "sha256": "941ec59e87ad169e200db58c7d0a7ca78710c87974459c5d8cd84cb3259833cb",
+          "view_center": [
+            -0.1610582977195244,
+            0.3501319334395259
+          ],
+          "view_quantile": 0.997,
+          "view_radius": 12.102721620278164
+        }
+      }
+    },
+    "output_sha256": {
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_wikipedia_article_layouts.pdf": "9011f83da891caa0b060e8bf33f8d70cd86b738dde4b22882bc59b35beb69f92",
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_wikipedia_article_layouts.png": "56598e7745b27fc153ff1c4ea99a5a077454b118db1c406859f8a5cd0649758b"
+    },
+    "outputs": [
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_wikipedia_article_layouts.pdf",
+      "/home/igor/devel/dimension-reduction-benchmarks/papers/figures/large_wikipedia_article_layouts.png"
+    ],
+    "pca_and_background_rng_seed": 1731,
+    "pca_fit_index_sha256": "dea370fbbf1f5fa8a7ac44d055be069a053098f6498f340895a76ee679bfa813",
+    "pca_fit_rule": "uniform 100,000-row sample, identical indices for all methods",
+    "selected_articles": [
+      {
+        "rows": 44,
+        "title": "HMS Phoenix (1783)",
+        "url": "https://en.wikipedia.org/wiki/HMS%20Phoenix%20%281783%29"
+      },
+      {
+        "rows": 57,
+        "title": "Madonna studies",
+        "url": "https://en.wikipedia.org/wiki/Madonna%20studies"
+      },
+      {
+        "rows": 72,
+        "title": "2007 Pakistani state of emergency",
+        "url": "https://en.wikipedia.org/wiki/2007%20Pakistani%20state%20of%20emergency"
+      },
+      {
+        "rows": 64,
+        "title": "Atlanta Dream",
+        "url": "https://en.wikipedia.org/wiki/Atlanta%20Dream"
+      },
+      {
+        "rows": 47,
+        "title": "War Horse (play)",
+        "url": "https://en.wikipedia.org/wiki/War%20Horse%20%28play%29"
+      },
+      {
+        "rows": 65,
+        "title": "Jewish military history",
+        "url": "https://en.wikipedia.org/wiki/Jewish%20military%20history"
+      },
+      {
+        "rows": 51,
+        "title": "Juozas Tumas-Vai\u017egantas",
+        "url": "https://en.wikipedia.org/wiki/Juozas%20Tumas-Vai%C5%BEgantas"
+      },
+      {
+        "rows": 55,
+        "title": "Climate justice",
+        "url": "https://en.wikipedia.org/wiki/Climate%20justice"
+      }
+    ],
+    "selected_index_sha256": "4107b971e8a502ff9a1a4d65734a60bfad5cd7df40ee9b29a5030b4a325f31e5",
+    "selection_applies_to_target_dimensions": [
+      2,
+      8
+    ],
+    "selection_rule": "eight lowest SHA-256 scores among URLs with 40--100 rows; hash salt recorded below"
+  }
+}

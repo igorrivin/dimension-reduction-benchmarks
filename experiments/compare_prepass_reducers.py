@@ -38,7 +38,7 @@ import argparse
 import contextlib
 import csv
 import hashlib
-import inspect
+import importlib.metadata
 import json
 import math
 import os
@@ -62,6 +62,8 @@ from sklearn.manifold import trustworthiness
 from sklearn.metrics import accuracy_score, balanced_accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
+
+from dimension_reduction_benchmarks.dire_backend import implementation_identity, load_dire
 
 PREPASS_KINDS = ("direct", "pca_raw", "pca", "ae")
 GRAPH_METHODS = ("dire", "umap")
@@ -940,14 +942,7 @@ def _run_graph(config: dict[str, Any], cupy) -> dict[str, Any]:
             "nn_descent_exactly_deterministic": False,
         }
     else:
-        repository = Path(config["dire_repo"]).expanduser().resolve()
-        if not repository.is_dir():
-            raise FileNotFoundError(f"DiRe repository does not exist: {repository}")
-        sys.path.insert(0, str(repository))
-        import dire_rapids
-
-        if not Path(dire_rapids.__file__).resolve().is_relative_to(repository):
-            raise RuntimeError("imported DiRe outside requested repository")
+        dire_rapids, identity = load_dire(config.get("dire_repo"))
         reducer = dire_rapids.create_dire(
             backend="cuvs",
             n_components=config["final_dimension"],
@@ -961,18 +956,12 @@ def _run_graph(config: dict[str, Any], cupy) -> dict[str, Any]:
             verbose=False,
         )
         backend = f"{type(reducer).__module__}.{type(reducer).__name__}"
-        implementation = Path(inspect.getfile(dire_rapids.create_dire)).resolve()
         details = {
-            "dire_repo": str(repository),
-            "dire_revision": subprocess.run(
-                ["git", "rev-parse", "HEAD"],
-                cwd=repository,
-                check=False,
-                capture_output=True,
-                text=True,
-            ).stdout.strip()
-            or None,
-            "implementation_sha256": _sha256_file(implementation),
+            "dire_repo": identity["source_checkout"],
+            "dire_revision": identity["git_revision"],
+            "dire_version": identity["version"],
+            "dire_module": identity["module_path"],
+            "implementation_sha256": implementation_identity(dire_rapids.create_dire)["sha256"],
             "cuvs_index": "ivf_flat",
             "init": "random",
             "init_note": (
@@ -1119,8 +1108,20 @@ class PreparedSubset:
     labels_file_sha256: str | None
 
 
-def dire_repository_identity(path: str | Path) -> dict[str, Any]:
+def dire_repository_identity(path: str | Path | None) -> dict[str, Any]:
     """Capture the current DiRe source identity without importing Torch."""
+    if path is None:
+        try:
+            version = importlib.metadata.version("dire-rapids")
+        except importlib.metadata.PackageNotFoundError:
+            version = None
+        return {
+            "path": None,
+            "distribution_version": version,
+            "git_revision": None,
+            "source_sha256": {},
+            "identity_scope": "installed distribution; worker records imported implementation hash",
+        }
     repository = Path(path).expanduser().resolve()
     if not repository.is_dir():
         raise FileNotFoundError(f"DiRe repository does not exist: {repository}")
@@ -1507,7 +1508,11 @@ def orchestrate(args: argparse.Namespace) -> int:
                         "final_dimension": final_dimension,
                         "seed": seed,
                         "neighbors": args.neighbors,
-                        "dire_repo": str(Path(args.dire_repo).expanduser().resolve()),
+                        "dire_repo": (
+                            str(Path(args.dire_repo).expanduser().resolve())
+                            if args.dire_repo is not None
+                            else None
+                        ),
                         "dire_repository_identity": dire_identity,
                         "dire_iterations": args.dire_iterations,
                         "umap_min_dist": args.umap_min_dist,
@@ -1631,7 +1636,11 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--timeout", type=int, default=0)
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--resource-sample-interval", type=float, default=0.05)
-    parser.add_argument("--dire-repo", default="../dire-rapids")
+    parser.add_argument(
+        "--dire-repo",
+        default=None,
+        help="Optional DiRe source checkout; installed dire-rapids is used by default",
+    )
     parser.add_argument("--dire-iterations", type=int, default=128)
     parser.add_argument("--umap-min-dist", type=float, default=0.1)
     parser.add_argument("--umap-spread", type=float, default=1.0)

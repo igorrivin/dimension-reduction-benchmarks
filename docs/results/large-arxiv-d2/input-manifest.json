@@ -1,0 +1,31 @@
+{
+  "dataset": "arXiv paper embeddings for the DiRe large-corpus experiment",
+  "embeddings": {
+    "dtype": "float32",
+    "local_source": "../dire-rapids-arxiv/data/embeddings.npy",
+    "sha256": "637e072695330718cd9c921002f57e5291268f2fb6aa7c871f1e5f376cc0be80",
+    "shape": [723457, 384],
+    "size_bytes": 1111230080
+  },
+  "metadata": {
+    "columns": [
+      "paper_id",
+      "arxiv_id",
+      "title",
+      "primary_category",
+      "categories",
+      "n_chunks"
+    ],
+    "local_source": "../dire-rapids-arxiv/data/meta.parquet",
+    "rows": 723457,
+    "sha256": "25f629362b8ad95cd3f7155ae9a413944dbf834e9926409e8f0f8a3eba38e283",
+    "size_bytes": 43717629
+  },
+  "prepared_matrix": {
+    "content_sha256": "c15c11bbfd4bbacaf898a496cb17ea7cf019a3cddca9880deca4746e8bd434d0",
+    "preprocessing": "blockwise row-L2 normalization to float32",
+    "source_index_sha256": "66137089284c9b01279cea0a8032503de220858a0f07b65b17dd077a1bba9426",
+    "zero_rows": 0
+  },
+  "schema_version": 1
+}

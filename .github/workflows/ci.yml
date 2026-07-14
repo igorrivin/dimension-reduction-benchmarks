@@ -1,0 +1,27 @@
+name: CPU checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: python -m pip install -e '.[ae,data,test]'
+      - name: Lint
+        run: ruff check src examples experiments tests
+      - name: Format
+        run: black --check src examples experiments tests
+      - name: Test
+        run: python -m pytest -q
+      - name: Verify lazy import
+        run: python -c "import sys, dimension_reduction_benchmarks; assert 'torch' not in sys.modules"

@@ -1,0 +1,102 @@
+{
+  "cached_rows": 1000000,
+  "config": "en",
+  "created_or_updated_at": "2026-07-13T00:24:35.024727+00:00",
+  "dataset": "CohereLabs/wikipedia-2023-11-embed-multilingual-v3",
+  "dtype": "float32",
+  "embedding_dimension": 1024,
+  "embedding_field": "emb",
+  "metadata_fields": [
+    "_id",
+    "url",
+    "title"
+  ],
+  "requested_revision": "main",
+  "resolved_revision": "ade45fb52bd549f5e8c065636fe4160a43c2af36",
+  "schema_version": 1,
+  "shard_size": 100000,
+  "shards": [
+    {
+      "embedding_file": "emb_0000.npy",
+      "embedding_sha256": "e38bf4d79c5f93aa5618f70fb182575e0ab336571b450bffd1dad94a9f5206dc",
+      "index": 0,
+      "metadata_file": "meta_0000.parquet",
+      "metadata_sha256": "37fc83698dc227047068ab06ab5b51ebf9adf9b210514462b31ff6fccc5fd5d3",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0001.npy",
+      "embedding_sha256": "5210946990ad3642909e38b54464578b9518d3d6cb0ac6bb8dd8128016969104",
+      "index": 1,
+      "metadata_file": "meta_0001.parquet",
+      "metadata_sha256": "9a06a14abf353f527dfde38628ba1003e3d36f36feda237ab878fbcb9a8a54dc",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0002.npy",
+      "embedding_sha256": "67200c273503d87066fef86f597d7061f2f2b57609df1153e387b0d94fa7388f",
+      "index": 2,
+      "metadata_file": "meta_0002.parquet",
+      "metadata_sha256": "51fa8bb2706b49de8c181cd2efb7d8710fd1756ae6de396f3344ef278f31f3d8",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0003.npy",
+      "embedding_sha256": "5f554ea8f8d200364e7fa44f89e24244539682e60d4df489ea20215750bbe99a",
+      "index": 3,
+      "metadata_file": "meta_0003.parquet",
+      "metadata_sha256": "0586219d36c2ceffd411fd9a3aa6ebd7e72f50c87297efd0261dfcd4b1a9bc74",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0004.npy",
+      "embedding_sha256": "0b826a261c61a3abb343839bab71ffdf70a13af1879122ef917d1daa28fe9b91",
+      "index": 4,
+      "metadata_file": "meta_0004.parquet",
+      "metadata_sha256": "34434c2260c68d9d4aa4aeb7c24cd8c4606237fa349ef8ad0fcc8fe77379071a",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0005.npy",
+      "embedding_sha256": "602898c4a336c7a9d24ef40dbdcabddefd16f7bb861244c317dff0950c88b6ea",
+      "index": 5,
+      "metadata_file": "meta_0005.parquet",
+      "metadata_sha256": "6cda52364adef14fd432d26a6c803e7385aa4e7ecb10770381693e01c93588a3",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0006.npy",
+      "embedding_sha256": "4c51348080cb43dee176aba40e61585b0f1e697345ac84fba5e4019daa1f4358",
+      "index": 6,
+      "metadata_file": "meta_0006.parquet",
+      "metadata_sha256": "a6be7d0728402a1d4cc3b3e14cf7543f7247f333077232caf7aee834b7296ead",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0007.npy",
+      "embedding_sha256": "cd42f42ce7ca25a0da48a9d21097d58c799aeb761fe103721eec42937a3b2248",
+      "index": 7,
+      "metadata_file": "meta_0007.parquet",
+      "metadata_sha256": "bcf210695b5378fe13e922c69c1cee8ba75528aa9e04451cc33e00fe11761abb",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0008.npy",
+      "embedding_sha256": "f49038c6ee51bacd32dc1d6ff173010749e92f820af0486c4749b8294d34ed59",
+      "index": 8,
+      "metadata_file": "meta_0008.parquet",
+      "metadata_sha256": "b63155c737401f55312468fe5d253b771f31da17f641a2283a9af98579f14766",
+      "rows": 100000
+    },
+    {
+      "embedding_file": "emb_0009.npy",
+      "embedding_sha256": "7dff88c822bd5d7ef3bc51282e45bc458f85c5602a5cda5025a4e3cccdc9f235",
+      "index": 9,
+      "metadata_file": "meta_0009.parquet",
+      "metadata_sha256": "f7d9ec179def27f01d062e8b214acf3970bd00a22a038fbdddd9b5b1c3689f20",
+      "rows": 100000
+    }
+  ],
+  "split": "train",
+  "target_rows": 1000000
+}

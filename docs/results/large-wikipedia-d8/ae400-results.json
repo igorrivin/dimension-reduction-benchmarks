@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "configuration": {
+      "ae_amp": false,
+      "ae_batch_size": 32768,
+      "ae_epochs": 400,
+      "ae_hidden_dimensions": [],
+      "ae_learning_rate": 0.001,
+      "ae_min_delta": 1e-05,
+      "ae_patience": 30,
+      "ae_validation": 0.05,
+      "ae_weight_decay": 1e-05,
+      "category_min_count": 5,
+      "data": "artifacts/data/cohere-wikipedia-english-1m",
+      "dataset_name": "wikipedia-ae400",
+      "decoder_sample": 5000,
+      "device": "cuda",
+      "dire_cuvs_index": "auto",
+      "dire_iterations": 128,
+      "dire_repo": "../dire-rapids",
+      "dire_revision": null,
+      "distance_pairs": 200000,
+      "evaluation_seed": 2718,
+      "label_column": "url",
+      "label_policy": "group",
+      "label_shard_glob": "meta_*.parquet",
+      "labels": "artifacts/data/cohere-wikipedia-english-1m",
+      "methods": [
+        "autoencoder"
+      ],
+      "metric_jobs": 1,
+      "metric_sample": 3000,
+      "neighbors": 16,
+      "output_dir": "artifacts/large-wikipedia-d8-ae400",
+      "prepare_block_rows": 16384,
+      "require_all": true,
+      "sample_seed": 1729,
+      "seeds": [
+        0
+      ],
+      "shard_glob": "emb_*.npy",
+      "sizes": [
+        1000000
+      ],
+      "target_dimensions": [
+        8
+      ],
+      "timeout": 3600,
+      "umap_build_algo": "auto",
+      "umap_min_dist": 0.1,
+      "umap_spread": 1.0
+    },
+    "created_at": "2026-07-13T05:19:16.576707+00:00",
+    "dataset": "wikipedia-ae400",
+    "harness_sha256": "b3b75a2c16822f2f75c823e7c9e7b3773d70e161e005f6665db8c8e33cf26fdc",
+    "label_policy": "group",
+    "labels": {
+      "column": "url",
+      "files": [
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0000.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0001.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0002.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0003.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0004.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0005.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0006.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0007.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0008.parquet",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/meta_0009.parquet"
+      ],
+      "fingerprint": "3212ef14ca528c0d50b86e880efb39d3cbcfa136194c81b220bae212084131c3"
+    },
+    "metric_scope": "sample-conditional except sampled random-pair distances",
+    "numpy": "2.4.6",
+    "prepared": [
+      {
+        "features": 1024,
+        "normalized_sha256": "f5d5628206a0b218d04cb6d5ed064860d452bedaa1a9890c5b9a9a70fafdc316",
+        "path": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8-ae400/n1000000/prepared-l2.npy",
+        "preparation_seconds": 9.878966593998484,
+        "rows": 1000000,
+        "source_fingerprint": "0499580a704065f6dd6b1794b55ab00ed4e2c98a96ada416a97069b539387d4b",
+        "source_index_sha256": "6f8f1531c1170336132e3a5cf9fde98aa28840393edd4387ab4d7c7e743586fb",
+        "zero_rows": 0
+      }
+    ],
+    "protocol": "transductive fixed-target large-embedding comparison",
+    "python": "3.14.6",
+    "source": {
+      "dtype": "float32",
+      "features": 1024,
+      "files": [
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0000.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0001.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0002.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0003.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0004.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0005.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0006.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0007.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0008.npy",
+        "/home/igor/devel/dire-evoc/artifacts/data/cohere-wikipedia-english-1m/emb_0009.npy"
+      ],
+      "fingerprint": "0499580a704065f6dd6b1794b55ab00ed4e2c98a96ada416a97069b539387d4b",
+      "rows": 1000000
+    }
+  },
+  "rows": [
+    {
+      "dataset": "wikipedia-ae400",
+      "details": {
+        "amp_bfloat16": false,
+        "batch_size": 32768,
+        "best_validation_mse": 0.000511549015045166,
+        "device": "cuda",
+        "encode_reconstruction_seconds": 0.10765445600009116,
+        "fit_seconds": 159.64263324000058,
+        "hidden_dimensions": [
+          512,
+          256,
+          64
+        ],
+        "native_metric_finalize_seconds": 2.3232319460003055,
+        "native_reconstruction_cosine": 0.689419734375,
+        "native_reconstruction_mse": 0.0005090341873168945,
+        "native_reconstruction_nmse": 0.6744236242203158,
+        "protocol": "validation epoch selection followed by fresh full-data refit",
+        "refit_seconds": 79.24539236900091,
+        "selected_epochs": 400,
+        "selection_seconds": 77.55885951900018,
+        "staged_input_bytes": 4096000000,
+        "staging_seconds": 0.40749494999909075,
+        "training_pipeline": "cuda-resident device-side randperm and batch indexing",
+        "validation_fraction": 0.05
+      },
+      "error": null,
+      "features": 1024,
+      "hardware": {
+        "cuda_compute_capability": "9.0",
+        "gpu_name": "NVIDIA GH200 480GB",
+        "gpu_total_memory_bytes": 101468602368,
+        "machine": "aarch64",
+        "platform": "Linux-6.8.0-1013-nvidia-64k-aarch64-with-glibc2.35"
+      },
+      "layout": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8-ae400/n1000000/autoencoder-d8-s0-layout.npy",
+      "memory": {
+        "gpu_baseline_bytes": 0,
+        "peak_gpu_process_bytes": 6520045568,
+        "peak_incremental_gpu_bytes": 6520045568,
+        "peak_rss_bytes": 6336610304
+      },
+      "method": "autoencoder",
+      "metrics": {
+        "category_knn_accuracy": null,
+        "category_knn_balanced_accuracy": null,
+        "decoder_sample_index_sha256": "193624bf7a2dd479804f2f458de8a8437e23e1ba9dc31b33faa5bd886b74fc9d",
+        "decoder_sample_rows": 5000,
+        "distance_pair_count": 200000,
+        "distance_pair_sha256": "a8eda49e0a94bb033bbcba542192a34d142a7164f49d9748b0dcd9c2b37f2266",
+        "group_eligible_rows": 2895,
+        "group_neighbor_hit_rate": 0.30293609671848015,
+        "group_neighbor_purity": 0.0797279792746114,
+        "group_neighbor_recall": 0.08927481125667655,
+        "group_query_rows": 3000,
+        "group_reference_rows": 1000000,
+        "label_evaluation_policy": "group",
+        "metric_sample_index_sha256": "6b418df544b0be1fb158b9b709ae156ea4291b4583287c3905c779e3a98c4e20",
+        "metric_sample_rows": 3000,
+        "sample_conditional_continuity": 0.9395538915028286,
+        "sample_conditional_neighbor_overlap": 0.34597916666666667,
+        "sample_conditional_trustworthiness": 0.9629224640116507,
+        "sampled_local_decodability_nmse": 0.7911357867191234,
+        "sampled_pair_distance_spearman": 0.4517323597328906,
+        "sampled_pair_normalized_stress": 0.3969440742117313
+      },
+      "n_samples": 1000000,
+      "prepared_data": "/home/igor/devel/dire-evoc/artifacts/large-wikipedia-d8-ae400/n1000000/prepared-l2.npy",
+      "prepared_sha256": "f5d5628206a0b218d04cb6d5ed064860d452bedaa1a9890c5b9a9a70fafdc316",
+      "rows": 1000000,
+      "seed": 0,
+      "source_index_sha256": "6f8f1531c1170336132e3a5cf9fde98aa28840393edd4387ab4d7c7e743586fb",
+      "status": "ok",
+      "target_dimension": 8,
+      "versions": {
+        "numpy": "2.4.6",
+        "torch": "2.11.0+cu130"
+      }
+    }
+  ]
+}

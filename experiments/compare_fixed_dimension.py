@@ -29,8 +29,6 @@ import hashlib
 import inspect
 import json
 import platform
-import subprocess
-import sys
 import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -47,6 +45,8 @@ from sklearn.manifold import trustworthiness
 from sklearn.metrics import balanced_accuracy_score
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor, NearestNeighbors
+
+from dimension_reduction_benchmarks.dire_backend import implementation_identity, load_dire
 
 
 @dataclass(frozen=True)
@@ -71,20 +71,6 @@ class BackendContext:
     cuda_devices: int = 0
     versions: dict | None = None
     hardware: dict | None = None
-
-
-def _git_revision(repo):
-    try:
-        completed = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            cwd=repo,
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        return completed.stdout.strip()
-    except (OSError, subprocess.CalledProcessError):
-        return None
 
 
 def load_backends(methods, dire_repo):
@@ -123,19 +109,16 @@ def load_backends(methods, dire_repo):
 
     if "dire" in methods:
         try:
-            dire_repo = Path(dire_repo).expanduser().resolve()
-            if str(dire_repo) not in sys.path:
-                sys.path.insert(0, str(dire_repo))
-            import dire_rapids
+            dire_rapids, identity = load_dire(dire_repo)
 
             context.dire_class = dire_rapids.DiRePyTorch
-            context.versions["dire_rapids"] = getattr(dire_rapids, "__version__", "unknown")
-            context.versions["dire_rapids_git"] = _git_revision(dire_repo)
-            context.versions["dire_rapids_module"] = str(Path(dire_rapids.__file__).resolve())
-            implementation = Path(inspect.getfile(dire_rapids.DiRePyTorch)).resolve()
-            context.versions["dire_pytorch_sha256"] = hashlib.sha256(
-                implementation.read_bytes()
-            ).hexdigest()
+            context.versions["dire_rapids"] = identity["version"]
+            context.versions["dire_rapids_git"] = identity["git_revision"]
+            context.versions["dire_rapids_module"] = identity["module_path"]
+            context.versions["dire_source_checkout"] = identity["source_checkout"]
+            context.versions["dire_pytorch_sha256"] = implementation_identity(
+                dire_rapids.DiRePyTorch
+            )["sha256"]
         except Exception as exc:
             context.dire_error = f"DiRe import failed: {type(exc).__name__}: {exc}"
 
@@ -926,7 +909,11 @@ def parse_args():
         default=None,
         help="Expected DiRe git revision recorded for provenance (for example f7d5736)",
     )
-    parser.add_argument("--dire-repo", default="../dire-rapids")
+    parser.add_argument(
+        "--dire-repo",
+        default=None,
+        help="Optional DiRe source checkout; installed dire-rapids is used by default",
+    )
     parser.add_argument("--output-dir", default="artifacts/fixed-dimension")
     parser.add_argument("--require-all", action="store_true")
     args = parser.parse_args()

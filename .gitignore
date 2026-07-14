@@ -1,0 +1,32 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+.venv/
+
+# Large downloaded or generated research artifacts.
+artifacts/
+data/*
+!data/README.md
+*.npy
+*.npz
+*.fbin
+*.pt
+*.pth
+
+# LaTeX intermediates; source and rendered PDF stay tracked.
+papers/*.aux
+papers/*.bbl
+papers/*.blg
+papers/*.fdb_latexmk
+papers/*.fls
+papers/*.log
+papers/*.out
+papers/*.synctex.gz
+papers/*.toc

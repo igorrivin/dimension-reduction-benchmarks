@@ -1,0 +1,1233 @@
+{
+  "created_utc": "2026-07-13T13:37:19.070219+00:00",
+  "figures": {
+    "pdf": "papers/figures/dimension_estimator_agreement.pdf",
+    "png": "papers/figures/dimension_estimator_agreement.png"
+  },
+  "protocol": {
+    "ae_activation": "SiLU with linear bottleneck and output",
+    "ae_batch_size": 256,
+    "ae_candidate_dimensions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "ae_elbow_guards": {
+      "max_tail_drop": 0.01,
+      "min_relative_drop": 0.05,
+      "min_strength": 0.05
+    },
+    "ae_epochs_cap": 100,
+    "ae_hidden_dimensions": [
+      128,
+      64
+    ],
+    "ae_loss": "validation MSE divided by validation mean-predictor MSE",
+    "ae_optimizer": "AdamW(lr=1e-3, weight_decay=1e-5)",
+    "ae_patience": 12,
+    "ae_repeats_per_seed_width": 1,
+    "ae_validation_fraction": 0.2,
+    "ambient_dimension": 10,
+    "datasets": [
+      "linear",
+      "circle",
+      "swiss-roll"
+    ],
+    "device": "cpu",
+    "input_neighbor_search": "exact sklearn CPU Euclidean kNN",
+    "linear_true_dimension": 3,
+    "mle_neighbors_used": 20,
+    "neighbors_retrieved": 20,
+    "samples_per_dataset_seed": 600,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "twonn_neighbors_used": 2,
+    "twonn_tail_fraction": 0.9
+  },
+  "records": [
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 1.0838769380284217,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            false
+          ],
+          [
+            true
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.3079887398865384,
+          0.5999816210642358,
+          0.4,
+          0.19999999999999996,
+          0.0
+        ],
+        "elbow_strength": 0.5999816210642358,
+        "epochs_run": [
+          [
+            100
+          ],
+          [
+            41
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.9994512861209909,
+        "repeat_validation_nmse": [
+          [
+            0.5867648001790593
+          ],
+          [
+            0.28885844382365167
+          ],
+          [
+            0.0003327441847512089
+          ],
+          [
+            0.0002413730604375834
+          ],
+          [
+            0.0004012798029800383
+          ],
+          [
+            0.00032324510529918745
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.5867648001790593,
+          0.28885844382365167,
+          0.0003327441847512089,
+          0.00032196598957226973,
+          0.00032196598957226973,
+          0.00032196598957226973
+        ],
+        "tail_drop_fraction": 0.0,
+        "validation_nmse": [
+          0.5867648001790593,
+          0.28885844382365167,
+          0.0003327441847512089,
+          0.0002413730604375834,
+          0.0004012798029800383,
+          0.00032324510529918745
+        ]
+      },
+      "autoencoder_dimension": 3,
+      "autoencoder_elapsed_seconds": 21.51400340399414,
+      "dataset": "linear",
+      "description": "rank-3 linear subspace",
+      "known_local_dimension": 3,
+      "mle": 3.1052137060016474,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 0,
+      "twonn": 3.0404147030182775,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 0.9712584480183807,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            true
+          ],
+          [
+            true
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.29914107664963996,
+          0.5999434671217754,
+          0.4,
+          0.19999999999999996,
+          0.0
+        ],
+        "elbow_strength": 0.5999434671217754,
+        "epochs_run": [
+          [
+            60
+          ],
+          [
+            31
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.9995673434618273,
+        "repeat_validation_nmse": [
+          [
+            0.5992758660967228
+          ],
+          [
+            0.30028208269169687
+          ],
+          [
+            0.00029314475331707567
+          ],
+          [
+            0.0002037719457075057
+          ],
+          [
+            0.0002122125266941939
+          ],
+          [
+            0.0003618573925059272
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.5992758660967228,
+          0.30028208269169687,
+          0.00029314475331707567,
+          0.0002592806216358756,
+          0.0002592806216358756,
+          0.0002592806216358756
+        ],
+        "tail_drop_fraction": 0.0,
+        "validation_nmse": [
+          0.5992758660967228,
+          0.30028208269169687,
+          0.00029314475331707567,
+          0.0002037719457075057,
+          0.0002122125266941939,
+          0.0003618573925059272
+        ]
+      },
+      "autoencoder_dimension": 3,
+      "autoencoder_elapsed_seconds": 18.83413218199712,
+      "dataset": "linear",
+      "description": "rank-3 linear subspace",
+      "known_local_dimension": 3,
+      "mle": 3.0229714846752547,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 1,
+      "twonn": 2.938994709842257,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 1.0528306297525258,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.3193908025217986,
+          0.5997800851641966,
+          0.4,
+          0.19999999999999996,
+          0.0
+        ],
+        "elbow_strength": 0.5997800851641966,
+        "epochs_run": [
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.999509710852043,
+        "repeat_validation_nmse": [
+          [
+            0.5534896099602077
+          ],
+          [
+            0.2661531443112301
+          ],
+          [
+            0.00039303084768596954
+          ],
+          [
+            0.0002560256060203119
+          ],
+          [
+            0.00023981004858679048
+          ],
+          [
+            0.0003182741932044001
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.5534896099602077,
+          0.2661531443112301,
+          0.00039303084768596954,
+          0.0002713699492705008,
+          0.0002713699492705008,
+          0.0002713699492705008
+        ],
+        "tail_drop_fraction": 0.0,
+        "validation_nmse": [
+          0.5534896099602077,
+          0.2661531443112301,
+          0.00039303084768596954,
+          0.0002560256060203119,
+          0.00023981004858679048,
+          0.0003182741932044001
+        ]
+      },
+      "autoencoder_dimension": 3,
+      "autoencoder_elapsed_seconds": 21.925437822996173,
+      "dataset": "linear",
+      "description": "rank-3 linear subspace",
+      "known_local_dimension": 3,
+      "mle": 3.030826607657081,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 2,
+      "twonn": 3.1272258994297326,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 1.0005381292237185,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.799867108020036,
+          0.5999042500091103,
+          0.39990425000911034,
+          0.19990425000911027,
+          0.0
+        ],
+        "elbow_strength": 0.799867108020036,
+        "epochs_run": [
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.9998127260807615,
+        "repeat_validation_nmse": [
+          [
+            0.13154492685748154
+          ],
+          [
+            4.211292600768624e-05
+          ],
+          [
+            3.385862902066122e-05
+          ],
+          [
+            3.833802215413364e-05
+          ],
+          [
+            3.9487351111232045e-05
+          ],
+          [
+            2.4634934008526803e-05
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.13154492685748154,
+          4.211292600768624e-05,
+          3.722800076200897e-05,
+          3.722800076200897e-05,
+          3.722800076200897e-05,
+          2.4634934008526803e-05
+        ],
+        "tail_drop_fraction": 9.574999088969195e-05,
+        "validation_nmse": [
+          0.13154492685748154,
+          4.211292600768624e-05,
+          3.385862902066122e-05,
+          3.833802215413364e-05,
+          3.9487351111232045e-05,
+          2.4634934008526803e-05
+        ]
+      },
+      "autoencoder_dimension": 2,
+      "autoencoder_elapsed_seconds": 21.49611795900273,
+      "dataset": "circle",
+      "description": "circle",
+      "known_local_dimension": 1,
+      "mle": 0.9906451334370276,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 0,
+      "twonn": 0.9694268431188836,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 1.0222948039548339,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            true
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.7999595232789222,
+          0.5999901226845636,
+          0.3999901226845637,
+          0.19999999999999996,
+          0.0
+        ],
+        "elbow_strength": 0.7999595232789222,
+        "epochs_run": [
+          [
+            33
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.999950567083841,
+        "repeat_validation_nmse": [
+          [
+            0.5458628801522176
+          ],
+          [
+            4.907724132821428e-05
+          ],
+          [
+            2.926811081482949e-05
+          ],
+          [
+            3.548186381655496e-05
+          ],
+          [
+            1.9444136693923306e-05
+          ],
+          [
+            3.452305128389451e-05
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.5458628801522176,
+          4.907724132821428e-05,
+          3.237498731569223e-05,
+          3.237498731569223e-05,
+          2.698359398890891e-05,
+          2.698359398890891e-05
+        ],
+        "tail_drop_fraction": 0.0,
+        "validation_nmse": [
+          0.5458628801522176,
+          4.907724132821428e-05,
+          2.926811081482949e-05,
+          3.548186381655496e-05,
+          1.9444136693923306e-05,
+          3.452305128389451e-05
+        ]
+      },
+      "autoencoder_dimension": 2,
+      "autoencoder_elapsed_seconds": 21.09269471999869,
+      "dataset": "circle",
+      "description": "circle",
+      "known_local_dimension": 1,
+      "mle": 1.006527137090906,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 1,
+      "twonn": 1.044905009669182,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 0.9990876788419051,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.8,
+          0.6,
+          0.4,
+          0.19999999999999996,
+          0.0
+        ],
+        "elbow_strength": 0.8,
+        "epochs_run": [
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.9997316814016848,
+        "repeat_validation_nmse": [
+          [
+            0.14319244067527345
+          ],
+          [
+            3.72019313101391e-05
+          ],
+          [
+            2.8989449754189793e-05
+          ],
+          [
+            3.229353700862477e-05
+          ],
+          [
+            3.542723546474856e-05
+          ],
+          [
+            5.8193821318898e-05
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.14319244067527345,
+          3.8421194971320044e-05,
+          3.8421194971320044e-05,
+          3.8421194971320044e-05,
+          3.8421194971320044e-05,
+          3.8421194971320044e-05
+        ],
+        "tail_drop_fraction": 0.0,
+        "validation_nmse": [
+          0.14319244067527345,
+          3.72019313101391e-05,
+          2.8989449754189793e-05,
+          3.229353700862477e-05,
+          3.542723546474856e-05,
+          5.8193821318898e-05
+        ]
+      },
+      "autoencoder_dimension": 2,
+      "autoencoder_elapsed_seconds": 22.490213730001415,
+      "dataset": "circle",
+      "description": "circle",
+      "known_local_dimension": 1,
+      "mle": 0.994876502025376,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 2,
+      "twonn": 1.0891395992435922,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 1.0174810920668023,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            false
+          ],
+          [
+            true
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.15926004857480858,
+          0.5999433884519432,
+          0.3999433884519432,
+          0.19994338845194318,
+          0.0
+        ],
+        "elbow_strength": 0.5999433884519432,
+        "epochs_run": [
+          [
+            100
+          ],
+          [
+            37
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.9996771647331095,
+        "repeat_validation_nmse": [
+          [
+            0.47171939581147226
+          ],
+          [
+            0.30230417362963047
+          ],
+          [
+            0.00016091611449053458
+          ],
+          [
+            0.00019621586393955696
+          ],
+          [
+            0.00017981942471847185
+          ],
+          [
+            0.00015228765704423722
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.47171939581147226,
+          0.30230417362963047,
+          0.00017898380104952114,
+          0.00017898380104952114,
+          0.00017898380104952114,
+          0.00015228765704423722
+        ],
+        "tail_drop_fraction": 5.661154805678583e-05,
+        "validation_nmse": [
+          0.47171939581147226,
+          0.30230417362963047,
+          0.00016091611449053458,
+          0.00019621586393955696,
+          0.00017981942471847185,
+          0.00015228765704423722
+        ]
+      },
+      "autoencoder_dimension": 3,
+      "autoencoder_elapsed_seconds": 20.54266630899656,
+      "dataset": "swiss-roll",
+      "description": "noise-free Swiss roll",
+      "known_local_dimension": 2,
+      "mle": 1.9045353283420436,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 0,
+      "twonn": 2.071212715225533,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 1.0823763485944835,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.5275293507472715,
+          0.6,
+          0.4,
+          0.19999999999999996,
+          0.0
+        ],
+        "elbow_strength": 0.6,
+        "epochs_run": [
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.9996219116422788,
+        "repeat_validation_nmse": [
+          [
+            0.4592266558752806
+          ],
+          [
+            0.12525210473004908
+          ],
+          [
+            0.00013581922563950068
+          ],
+          [
+            0.00019543918086135524
+          ],
+          [
+            0.00016817212623327667
+          ],
+          [
+            0.00019508247583261554
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.4592266558752806,
+          0.12525210473004908,
+          0.00017362825214168703,
+          0.00017362825214168703,
+          0.00017362825214168703,
+          0.00017362825214168703
+        ],
+        "tail_drop_fraction": 0.0,
+        "validation_nmse": [
+          0.4592266558752806,
+          0.12525210473004908,
+          0.00013581922563950068,
+          0.00019543918086135524,
+          0.00016817212623327667,
+          0.00019508247583261554
+        ]
+      },
+      "autoencoder_dimension": 3,
+      "autoencoder_elapsed_seconds": 23.464063490006083,
+      "dataset": "swiss-roll",
+      "description": "noise-free Swiss roll",
+      "known_local_dimension": 2,
+      "mle": 1.9163760581569018,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 1,
+      "twonn": 1.9024979903782517,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    },
+    {
+      "autoencoder": {
+        "ambiguity_reason": null,
+        "baseline_mse": 1.0299567555572817,
+        "candidate_dimensions": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "device": "cpu",
+        "early_stopped": [
+          [
+            true
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ],
+          [
+            false
+          ]
+        ],
+        "elbow_scores": [
+          0.0,
+          0.640732318122866,
+          0.5999180695138888,
+          0.39997140701200307,
+          0.19999999999999996,
+          0.0
+        ],
+        "elbow_strength": 0.640732318122866,
+        "epochs_run": [
+          [
+            32
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ],
+          [
+            100
+          ]
+        ],
+        "n_train": 480,
+        "n_validation": 120,
+        "relative_drop": 0.9997193033927537,
+        "repeat_validation_nmse": [
+          [
+            0.6445827070478398
+          ],
+          [
+            0.10281330905983554
+          ],
+          [
+            0.00023372832962386685
+          ],
+          [
+            0.00019935755117199443
+          ],
+          [
+            0.00015184397543404482
+          ],
+          [
+            0.0002100203824818373
+          ]
+        ],
+        "smoothed_validation_nmse": [
+          0.6445827070478398,
+          0.10281330905983554,
+          0.00023372832962386685,
+          0.00019935755117199443,
+          0.00018093217895794104,
+          0.00018093217895794104
+        ],
+        "tail_drop_fraction": 0.0,
+        "validation_nmse": [
+          0.6445827070478398,
+          0.10281330905983554,
+          0.00023372832962386685,
+          0.00019935755117199443,
+          0.00015184397543404482,
+          0.0002100203824818373
+        ]
+      },
+      "autoencoder_dimension": 2,
+      "autoencoder_elapsed_seconds": 20.57703453299473,
+      "dataset": "swiss-roll",
+      "description": "noise-free Swiss roll",
+      "known_local_dimension": 2,
+      "mle": 1.9671312823020575,
+      "mle_n_used": 600,
+      "mle_rows_excluded_as_degenerate": 0,
+      "seed": 2,
+      "twonn": 1.9952046921979547,
+      "twonn_n_used": 600,
+      "twonn_rows_excluded_as_degenerate": 0
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Controlled synthetic estimator cross-check; not an arXiv/Wikipedia result and not a DiRe layout fit.",
+  "source_sha256": {
+    "analysis_script": "c1599de0d05dd7bdea40fbe3bb7134c73c7396cf33ffe0c1d1be6531b5a0f8d5",
+    "autoencoder_estimator": "18fd0b8a7cc8f6bf91d4a34d1b9124e15eb39741eebfe0e105317dfee0f1d433",
+    "dimension_estimator": "97b2d26e8ac972f5b6070b9f8380653a6ec19299c6ff068a29d7028a3084fa25",
+    "original_single_seed_example": "77fd927674f65c7edee2b41e9994f85db540ecd38191bfd1aa6f7d10f719a693"
+  },
+  "summary": {
+    "by_dataset": {
+      "circle": {
+        "known_local_dimension": 1,
+        "methods": {
+          "autoencoder": {
+            "maximum": 2.0,
+            "mean": 2.0,
+            "mean_absolute_error_from_known_local_dimension": 1.0,
+            "median": 2.0,
+            "minimum": 2.0,
+            "n": 3,
+            "sample_sd": 0.0
+          },
+          "mle": {
+            "maximum": 1.006527137090906,
+            "mean": 0.9973495908511033,
+            "mean_absolute_error_from_known_local_dimension": 0.007001833876167411,
+            "median": 0.994876502025376,
+            "minimum": 0.9906451334370276,
+            "n": 3,
+            "sample_sd": 0.008224757520462415
+          },
+          "twonn": {
+            "maximum": 1.0891395992435922,
+            "mean": 1.0344904840105527,
+            "mean_absolute_error_from_known_local_dimension": 0.05487258859796355,
+            "median": 1.044905009669182,
+            "minimum": 0.9694268431188836,
+            "n": 3,
+            "sample_sd": 0.06053208036458168
+          }
+        },
+        "rounded_twonn_exact_ae_count": 0,
+        "rounded_twonn_within_one_of_ae_count": 3,
+        "runs": 3
+      },
+      "linear": {
+        "known_local_dimension": 3,
+        "methods": {
+          "autoencoder": {
+            "maximum": 3.0,
+            "mean": 3.0,
+            "mean_absolute_error_from_known_local_dimension": 0.0,
+            "median": 3.0,
+            "minimum": 3.0,
+            "n": 3,
+            "sample_sd": 0.0
+          },
+          "mle": {
+            "maximum": 3.1052137060016474,
+            "mean": 3.0530039327779943,
+            "mean_absolute_error_from_known_local_dimension": 0.05300393277799431,
+            "median": 3.030826607657081,
+            "minimum": 3.0229714846752547,
+            "n": 3,
+            "sample_sd": 0.045385251506561725
+          },
+          "twonn": {
+            "maximum": 3.1272258994297326,
+            "mean": 3.0355451040967556,
+            "mean_absolute_error_from_known_local_dimension": 0.07621529753525103,
+            "median": 3.0404147030182775,
+            "minimum": 2.938994709842257,
+            "n": 3,
+            "sample_sd": 0.09421003093419195
+          }
+        },
+        "rounded_twonn_exact_ae_count": 3,
+        "rounded_twonn_within_one_of_ae_count": 3,
+        "runs": 3
+      },
+      "swiss-roll": {
+        "known_local_dimension": 2,
+        "methods": {
+          "autoencoder": {
+            "maximum": 3.0,
+            "mean": 2.6666666666666665,
+            "mean_absolute_error_from_known_local_dimension": 0.6666666666666666,
+            "median": 3.0,
+            "minimum": 2.0,
+            "n": 3,
+            "sample_sd": 0.5773502691896258
+          },
+          "mle": {
+            "maximum": 1.9671312823020575,
+            "mean": 1.929347556267001,
+            "mean_absolute_error_from_known_local_dimension": 0.07065244373299902,
+            "median": 1.9163760581569018,
+            "minimum": 1.9045353283420436,
+            "n": 3,
+            "sample_sd": 0.03325294250823936
+          },
+          "twonn": {
+            "maximum": 2.071212715225533,
+            "mean": 1.989638465933913,
+            "mean_absolute_error_from_known_local_dimension": 0.05783667754977554,
+            "median": 1.9952046921979547,
+            "minimum": 1.9024979903782517,
+            "n": 3,
+            "sample_sd": 0.08449498062719668
+          }
+        },
+        "rounded_twonn_exact_ae_count": 1,
+        "rounded_twonn_within_one_of_ae_count": 3,
+        "runs": 3
+      }
+    },
+    "paired_descriptive_summary": {
+      "inference_warning": "The nine paired values are clustered within three dataset families; the correlation and p-value are descriptive, not inferential.",
+      "mean_absolute_ae_minus_twonn": 0.5729176714191505,
+      "mean_signed_ae_minus_twonn": 0.5356642042084816,
+      "rounded_twonn_exact_ae_count": 4,
+      "rounded_twonn_within_one_of_ae_count": 9,
+      "runs": 9,
+      "spearman_p_value_descriptive_only": 0.013273916948507132,
+      "spearman_rho": 0.7794228634059946
+    }
+  },
+  "versions": {
+    "numpy": "2.4.6",
+    "python": "3.14.6",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.16.3",
+    "torch": "2.11.0"
+  }
+}

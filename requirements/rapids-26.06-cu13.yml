@@ -1,0 +1,26 @@
+name: dimension-reduction-benchmarks
+channels:
+  - rapidsai
+  - conda-forge
+  - nvidia
+dependencies:
+  - python=3.14.6
+  - cuda-version=13.1
+  - cuml=26.06
+  - cuvs=26.06
+  - cupy=14.1.1
+  - numpy=2.4.6
+  - scipy=1.16.3
+  - scikit-learn=1.9.0
+  - pandas=2.3.3
+  - matplotlib=3.11.0
+  - pip
+  - pip:
+      - torch==2.11.0
+      - dire-rapids==0.3.0
+      - psutil==7.2.2
+      - nvidia-ml-py==13.610.43
+
+# Observed on the benchmark machine on 2026-07-14. PyTorch reported 2.11.0+cu130;
+# cuML and cuVS reported 26.06.00. Install this repository after creating the env:
+# python -m pip install -e '.[ae,data,dire,monitoring,topology,viz,test]'
