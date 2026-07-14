@@ -1,0 +1,1098 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-07-13T19:40:44Z",
+  "bundle": {
+    "summary": "docs/results/yandex-deep1b-scaling/summary.md",
+    "results": "docs/results/yandex-deep1b-scaling/results.csv",
+    "provenance": "docs/results/yandex-deep1b-scaling/provenance.json",
+    "scope": "Deep1B strict-prefix scaling at 96 to 8 dimensions",
+    "large_arrays_included": false
+  },
+  "dataset": {
+    "name": "Yandex DEEP-1B / Deep1B",
+    "publisher": "Yandex Research",
+    "benchmark_page_url": "https://research.yandex.com/blog/benchmarks-for-billion-scale-similarity-search",
+    "big_ann_dataset_table_url": "https://big-ann-benchmarks.com/neurips21.html#benchmark-datasets",
+    "description": "PCA-compressed 96-D GoogLeNet image embeddings; L2-normalized; Euclidean distance",
+    "dimensions": 96,
+    "distance": "euclidean",
+    "release_terms": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "standalone_10m_debug_sample_used": false,
+    "prefix_policy": "All 10M and 100M experiments use exact leading prefixes of base.1B.fbin so that the Big ANN prefix ground truths apply.",
+    "format": {
+      "fbin": "little-endian uint32 rows; uint32 dimension; row-major float32 payload",
+      "big_ann_ground_truth": "little-endian uint32 queries; uint32 neighbors; uint32 ID matrix; float32 distance matrix"
+    },
+    "sources": {
+      "base_1b": {
+        "url": "https://storage.yandexcloud.net/yandex-research/ann-datasets/DEEP/base.1B.fbin",
+        "rows": 1000000000,
+        "dimension": 96,
+        "file_bytes": 384000000008,
+        "header_sha256": "e768abbf954bd5458ab9e6a04dc89abd889d3e0304af7d6293665de7cd587b46",
+        "etag": "\"ed22edcea08640670973dde650b852b9-5723\"",
+        "last_modified": "Sat, 01 May 2021 13:05:24 GMT",
+        "locally_staged": false
+      },
+      "base_prefix_10m": {
+        "derivation": "byte-exact leading range from base_1b with a rewritten 10M fbin header",
+        "rows": 10000000,
+        "file_bytes": 3840000008,
+        "sha256": "a8653d77b20e63434f4ff9ac5607a3f24c98e5a3ceb7fc6e90abeb5bcf8b5c7e",
+        "manifest_sha256": "e3173ad504bf702124a7d6912a03a3955bbedad1d40aca75b9f5e1ac4ec6dfd7",
+        "path": "artifacts/data/yandex-deep1b/deep-base-prefix-10m.fbin"
+      },
+      "base_prefix_100m": {
+        "derivation": "byte-exact leading range from base_1b with a rewritten 100M fbin header",
+        "rows": 100000000,
+        "file_bytes": 38400000008,
+        "sha256": "162cef480f030deead496c745b4214abc3fcbd9849c2561ab1251e84b6904ba4",
+        "manifest_sha256": "e49b27dd5f26935e1deb8bdf9ae426f8848c1315d1dcfd722fe98a3b5a2cd1ff",
+        "path": "artifacts/data/yandex-deep1b/deep-base-prefix-100m.fbin"
+      },
+      "selected_1m_input": {
+        "physical_file": "artifacts/data/yandex-deep1b/deep-base-prefix-10m.fbin",
+        "selection": "first 1000000 payload rows",
+        "header_plus_selected_payload_sha256": "0f4a8c0a9e3ea487d12a05a393144447b0ab12e9695cbd299ce9a1bedad5cb3e"
+      },
+      "query_10k": {
+        "url": "https://storage.yandexcloud.net/yandex-research/ann-datasets/DEEP/query.public.10K.fbin",
+        "path": "artifacts/data/yandex-deep1b/query.public.10K.fbin",
+        "rows": 10000,
+        "dimension": 96,
+        "file_bytes": 3840008,
+        "sha256": "8438fc763f14e0f9741fda15b3e11215aef089ce17d1ad47d53b52a7c9fda5bb"
+      },
+      "ground_truth_10m": {
+        "url": "https://dl.fbaipublicfiles.com/billion-scale-ann-benchmarks/GT_10M/deep-10M",
+        "etag": "\"ed369dbfad86a666c7af3d048aa63145\"",
+        "last_modified": "Thu, 01 Jul 2021 13:52:24 GMT",
+        "local_md5_matches_etag": true,
+        "path": "artifacts/data/yandex-deep1b/groundtruth.deep-10M.bin",
+        "queries": 10000,
+        "neighbors_per_query": 100,
+        "file_bytes": 8000008,
+        "sha256": "1143a372b9fb64170aa032e084d1659d9c090c57601f0aefdb3e2c2f79f51369"
+      },
+      "ground_truth_100m": {
+        "url": "https://dl.fbaipublicfiles.com/billion-scale-ann-benchmarks/GT_100M/deep-100M",
+        "etag": "\"1b89320eb54f3e847771981d4b7730ea\"",
+        "last_modified": "Thu, 01 Jul 2021 13:51:26 GMT",
+        "local_md5_matches_etag": true,
+        "path": "artifacts/data/yandex-deep1b/groundtruth.deep-100M.bin",
+        "queries": 10000,
+        "neighbors_per_query": 100,
+        "file_bytes": 8000008,
+        "sha256": "766d7e0e2ff81796f44adfc46e2cab98809c8e802b952063d7b8fa647697066f"
+      }
+    },
+    "storage_at_bundle_creation": {
+      "filesystem_bytes": 4261618229248,
+      "used_bytes": 4043163324416,
+      "available_bytes": 218438127616,
+      "full_1b_base_bytes": 384000000008,
+      "full_1b_fp32_8d_layout_bytes": 32000000128,
+      "conclusion": "the 1B source alone exceeded available local space"
+    }
+  },
+  "hardware": {
+    "cpu": {
+      "architecture": "aarch64",
+      "model_name": "Neoverse-V2",
+      "logical_cpus": 64,
+      "threads_per_core": 1,
+      "cores_per_socket": 64,
+      "sockets": 1
+    },
+    "host_memory_bytes": 564443348992,
+    "gpu": {
+      "name": "NVIDIA GH200 480GB",
+      "device_id": 0,
+      "total_memory_bytes": 101468602368
+    },
+    "platform": "Linux-6.8.0-1013-nvidia-64k-aarch64-with-glibc2.35",
+    "machine": "aarch64",
+    "cuda_driver_version_integer": 13010,
+    "cuda_runtime_version_integer": 13020,
+    "note": "GPU model and CUDA values were recorded by the graph harness; GPU memory is device memory reported by CUDA/NVML."
+  },
+  "software": {
+    "autoencoder": {
+      "python": "3.14.6",
+      "numpy": "2.4.6",
+      "torch": "2.11.0+cu130"
+    },
+    "graph": {
+      "umap_10000000": {
+        "cuml": "26.06.00",
+        "cupy": "14.1.1",
+        "numpy": "2.4.6"
+      },
+      "umap_100000000": {
+        "cuml": "26.06.00",
+        "cupy": "14.1.1",
+        "numpy": "2.4.6"
+      },
+      "umap_100000000_c160": {
+        "cuml": "26.06.00",
+        "cupy": "14.1.1",
+        "numpy": "2.4.6"
+      },
+      "dire_10000000": {
+        "cuml": "26.06.00",
+        "cupy": "14.1.1",
+        "cuvs": "26.06.00",
+        "dire_rapids": "0.3.0",
+        "numpy": "2.4.6",
+        "torch": "2.11.0+cu130"
+      },
+      "dire_100000000": {
+        "cuml": "26.06.00",
+        "cupy": "14.1.1",
+        "cuvs": "26.06.00",
+        "dire_rapids": "0.3.0",
+        "numpy": "2.4.6",
+        "torch": "2.11.0+cu130"
+      }
+    },
+    "retrieval": {
+      "python": "3.14.6",
+      "numpy": "2.4.6"
+    },
+    "topology": {
+      "numpy": "2.4.3",
+      "platform": "Linux-6.8.0-1013-nvidia-64k-aarch64-with-glibc2.35",
+      "python": "3.14.4",
+      "scipy": "1.16.3",
+      "dire_rapids": "0.3.0",
+      "fastdtw": "0.3.4",
+      "ripser": "0.6.14"
+    }
+  },
+  "code": {
+    "harnesses": [
+      {
+        "path": "experiments/compare_yandex_streaming.py",
+        "sha256": "05303855aa3f09b89d523dbda4ebffca4f5d6996f16b320e15cecdef18e177b1"
+      },
+      {
+        "path": "experiments/compare_yandex_graph_methods.py",
+        "sha256": "bb245b715bfa88a2e954fd89fb9b1de9f2972fa4cb0061702418bb8773b466e5"
+      },
+      {
+        "path": "experiments/evaluate_yandex_retrieval.py",
+        "sha256": "bb52ad6208278e039aedff0574748580e09d9f6003e5261ef1d03a719bc714d2"
+      },
+      {
+        "path": "experiments/sample_yandex_topology.py",
+        "sha256": "03e5c8ba0219f849a767376d43adebb8bc2e51e3c9ef4bdcdbb9dbe028409557"
+      },
+      {
+        "path": "experiments/evaluate_large_topology.py",
+        "sha256": "a72074b6ff927b25e92a30df55136569b6a7715673cff28e414333fcccf32b20"
+      }
+    ],
+    "topology_betti_implementation": {
+      "sha256": "f3e8fae205bbc6e71151f559f18efc5fc2c1eb5b18d96d3b6b96e9bf3db2d7b0",
+      "version": "0.3.0"
+    }
+  },
+  "protocols": {
+    "autoencoder": {
+      "name": "streaming-fixed-budget-v1",
+      "input_access": "bounded os.preadv blocks from a local fbin; no persistent full-file mapping; not network streaming",
+      "architecture": {
+        "input_dimension": 96,
+        "hidden_dimensions": [
+          256,
+          128,
+          32
+        ],
+        "target_dimension": 8,
+        "parameter_count": 124328
+      },
+      "loss": "mean elementwise squared reconstruction error",
+      "validation": "65536-row Floyd uniform sample excluded from all training passes",
+      "runs": [
+        {
+          "run_id": "9150be239fb84f6b85c92ce8c4330c72",
+          "status": "ok",
+          "argument_payload": {
+            "batch_size": 8192,
+            "bf16": false,
+            "block_rows": 131072,
+            "data": "artifacts/data/yandex-deep1b/deep-base-prefix-10m.fbin",
+            "device": "cpu",
+            "disk_reserve_gib": 1,
+            "hidden_dimensions": [],
+            "host_memory_budget_gib": 2,
+            "learning_rate": 0.001,
+            "max_updates": null,
+            "passes": 1,
+            "query_data": "/home/igor/devel/dire-evoc/artifacts/data/yandex-deep1b/query.public.10K.fbin",
+            "rows": 1000000,
+            "seed": 1729,
+            "target_dimension": 8,
+            "validation_rows": 65536,
+            "validation_seed_offset": 1000003,
+            "weight_decay": 0.00001
+          },
+          "resolved_precision": {
+            "bf16_requested": false,
+            "encoding": "float32",
+            "loss": "float32",
+            "optimizer_state": [
+              "float32"
+            ],
+            "parameters": [
+              "float32"
+            ],
+            "training": "float32",
+            "validation": "float32"
+          },
+          "artifact_result": "artifacts/yandex-deep1b/ae-1m-d8-cpu-onepass-pread/result.json"
+        },
+        {
+          "run_id": "42e1965fe7974d8eb46c016d9b8362a3",
+          "status": "ok",
+          "argument_payload": {
+            "batch_size": 8192,
+            "bf16": false,
+            "block_rows": 131072,
+            "data": "artifacts/data/yandex-deep1b/deep-base-prefix-10m.fbin",
+            "device": "cpu",
+            "disk_reserve_gib": 1,
+            "hidden_dimensions": [],
+            "host_memory_budget_gib": 2,
+            "learning_rate": 0.001,
+            "max_updates": null,
+            "passes": 1,
+            "query_data": "/home/igor/devel/dire-evoc/artifacts/data/yandex-deep1b/query.public.10K.fbin",
+            "rows": 10000000,
+            "seed": 1729,
+            "target_dimension": 8,
+            "validation_rows": 65536,
+            "validation_seed_offset": 1000003,
+            "weight_decay": 0.00001
+          },
+          "resolved_precision": {
+            "bf16_requested": false,
+            "encoding": "float32",
+            "loss": "float32",
+            "optimizer_state": [
+              "float32"
+            ],
+            "parameters": [
+              "float32"
+            ],
+            "training": "float32",
+            "validation": "float32"
+          },
+          "artifact_result": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/result.json"
+        },
+        {
+          "run_id": "03289688087d46fab6ee9d53202672d8",
+          "status": "ok",
+          "argument_payload": {
+            "batch_size": 8192,
+            "bf16": false,
+            "block_rows": 131072,
+            "data": "artifacts/data/yandex-deep1b/deep-base-prefix-10m.fbin",
+            "device": "cuda",
+            "disk_reserve_gib": 1,
+            "hidden_dimensions": [],
+            "host_memory_budget_gib": 2,
+            "learning_rate": 0.001,
+            "max_updates": null,
+            "passes": 1,
+            "query_data": "/home/igor/devel/dire-evoc/artifacts/data/yandex-deep1b/query.public.10K.fbin",
+            "rows": 10000000,
+            "seed": 1729,
+            "target_dimension": 8,
+            "validation_rows": 65536,
+            "validation_seed_offset": 1000003,
+            "weight_decay": 0.00001
+          },
+          "resolved_precision": {
+            "bf16_requested": false,
+            "encoding": "float32",
+            "loss": "float32",
+            "optimizer_state": [
+              "float32"
+            ],
+            "parameters": [
+              "float32"
+            ],
+            "training": "float32",
+            "validation": "float32"
+          },
+          "artifact_result": "artifacts/yandex-deep1b/ae-10m-d8-gpu-fp32-onepass-pread/result.json"
+        },
+        {
+          "run_id": "fc1da3a30b4444699176b20880154d54",
+          "status": "ok",
+          "argument_payload": {
+            "batch_size": 8192,
+            "bf16": true,
+            "block_rows": 131072,
+            "data": "artifacts/data/yandex-deep1b/deep-base-prefix-10m.fbin",
+            "device": "cuda",
+            "disk_reserve_gib": 1,
+            "hidden_dimensions": [],
+            "host_memory_budget_gib": 2,
+            "learning_rate": 0.001,
+            "max_updates": null,
+            "passes": 1,
+            "query_data": "/home/igor/devel/dire-evoc/artifacts/data/yandex-deep1b/query.public.10K.fbin",
+            "rows": 10000000,
+            "seed": 1729,
+            "target_dimension": 8,
+            "validation_rows": 65536,
+            "validation_seed_offset": 1000003,
+            "weight_decay": 0.00001
+          },
+          "resolved_precision": {
+            "bf16_requested": true,
+            "encoding": "float32",
+            "loss": "float32",
+            "optimizer_state": [
+              "float32"
+            ],
+            "parameters": [
+              "float32"
+            ],
+            "training": "bfloat16_autocast",
+            "validation": "float32"
+          },
+          "artifact_result": "artifacts/yandex-deep1b/ae-10m-d8-gpu-bf16-onepass-pread/result.json"
+        },
+        {
+          "run_id": "a08abffe166e4785b972c1060d71e8d4",
+          "status": "ok",
+          "argument_payload": {
+            "batch_size": 8192,
+            "bf16": false,
+            "block_rows": 131072,
+            "data": "artifacts/data/yandex-deep1b/deep-base-prefix-100m.fbin",
+            "device": "cuda",
+            "disk_reserve_gib": 1,
+            "hidden_dimensions": [],
+            "host_memory_budget_gib": 2,
+            "learning_rate": 0.001,
+            "max_updates": null,
+            "passes": 1,
+            "query_data": "/home/igor/devel/dire-evoc/artifacts/data/yandex-deep1b/query.public.10K.fbin",
+            "rows": 100000000,
+            "seed": 1729,
+            "target_dimension": 8,
+            "validation_rows": 65536,
+            "validation_seed_offset": 1000003,
+            "weight_decay": 0.00001
+          },
+          "resolved_precision": {
+            "bf16_requested": false,
+            "encoding": "float32",
+            "loss": "float32",
+            "optimizer_state": [
+              "float32"
+            ],
+            "parameters": [
+              "float32"
+            ],
+            "training": "float32",
+            "validation": "float32"
+          },
+          "artifact_result": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/result.json"
+        }
+      ]
+    },
+    "graph": {
+      "timing_scope": "fit_seconds is backend fit_transform; worker_total_seconds also includes worker-side inspection import validation and writing",
+      "runs": [
+        {
+          "run_id": "99bd0618d7874c81a8ccb7a8a7bf38d1",
+          "status": "ok",
+          "configuration": {
+            "init": "random",
+            "method": "umap",
+            "neighbors": 16,
+            "rows": 10000000,
+            "seed": 0,
+            "target_dimension": 8,
+            "umap": {
+              "build_algo": "nn_descent",
+              "build_kwds": {
+                "knn_n_clusters": 16,
+                "knn_overlap_factor": 2,
+                "nnd_graph_degree": 64,
+                "nnd_intermediate_graph_degree": 128,
+                "nnd_max_iterations": 20,
+                "nnd_termination_threshold": 0.0001
+              },
+              "determinism_note": "random_state controls supported stochastic stages, but RAPIDS NN-descent graph construction is not exactly deterministic",
+              "device_ids": null,
+              "force_serial_epochs": null,
+              "hash_input": false,
+              "min_dist": 0.1,
+              "n_epochs": null,
+              "negative_sample_rate": 5,
+              "nn_descent_exactly_deterministic": false,
+              "random_state": 0,
+              "spread": 1
+            }
+          },
+          "timeout_seconds": 3600,
+          "layout_logical_data_sha256": "0380500308111ffa9a391e1c2fad834e11d5cff404268f37792e98e5291fa0fc",
+          "versions": {
+            "cuml": "26.06.00",
+            "cupy": "14.1.1",
+            "numpy": "2.4.6"
+          }
+        },
+        {
+          "run_id": "806469c0979d4993bd61a6fdf2d68dcc",
+          "status": "ok",
+          "configuration": {
+            "init": "random",
+            "method": "umap",
+            "neighbors": 16,
+            "rows": 100000000,
+            "seed": 0,
+            "target_dimension": 8,
+            "umap": {
+              "build_algo": "nn_descent",
+              "build_kwds": {
+                "knn_n_clusters": 16,
+                "knn_overlap_factor": 2,
+                "nnd_graph_degree": 64,
+                "nnd_intermediate_graph_degree": 128,
+                "nnd_max_iterations": 20,
+                "nnd_termination_threshold": 0.0001
+              },
+              "determinism_note": "random_state controls supported stochastic stages, but RAPIDS NN-descent graph construction is not exactly deterministic",
+              "device_ids": null,
+              "force_serial_epochs": null,
+              "hash_input": false,
+              "min_dist": 0.1,
+              "n_epochs": null,
+              "negative_sample_rate": 5,
+              "nn_descent_exactly_deterministic": false,
+              "random_state": 0,
+              "spread": 1
+            }
+          },
+          "timeout_seconds": 7200,
+          "layout_logical_data_sha256": "1b9eadff0cf48451d899996872a02d9eaf8498524f5a953d44e0f2e6570e0bd0",
+          "versions": {
+            "cuml": "26.06.00",
+            "cupy": "14.1.1",
+            "numpy": "2.4.6"
+          }
+        },
+        {
+          "run_id": "1a480470d9a3475e9a1ed766e735e92f",
+          "status": "ok",
+          "configuration": {
+            "init": "random",
+            "method": "umap",
+            "neighbors": 16,
+            "rows": 100000000,
+            "seed": 0,
+            "target_dimension": 8,
+            "umap": {
+              "build_algo": "nn_descent",
+              "build_kwds": {
+                "knn_n_clusters": 160,
+                "knn_overlap_factor": 2,
+                "nnd_graph_degree": 64,
+                "nnd_intermediate_graph_degree": 128,
+                "nnd_max_iterations": 20,
+                "nnd_termination_threshold": 0.0001
+              },
+              "determinism_note": "random_state controls supported stochastic stages, but RAPIDS NN-descent graph construction is not exactly deterministic",
+              "device_ids": null,
+              "force_serial_epochs": null,
+              "hash_input": false,
+              "min_dist": 0.1,
+              "n_epochs": null,
+              "negative_sample_rate": 5,
+              "nn_descent_exactly_deterministic": false,
+              "random_state": 0,
+              "spread": 1
+            }
+          },
+          "control_relation": "same 100M reducer configuration as run 806469c0979d4993bd61a6fdf2d68dcc except knn_n_clusters changed from 16 to 160; outer timeout also changed from 7200 to 3600 seconds but neither run timed out",
+          "timeout_seconds": 3600,
+          "timed_out": false,
+          "source_unchanged_parent": true,
+          "layout_logical_data_sha256": "edceb2a437b92a33de47cf02e922f9723e283fd89efc214b1d6b6251ea0ef431",
+          "layout_file_sha256": "d759ff72ffb5ef9169f16378b416f0196c04adfea937302dd2db1b6c9d067299",
+          "preflight": {
+            "estimated_partition_rows": 1250000,
+            "partition_input_float32_bytes": 480000000,
+            "named_tensor_bytes": 112480000000,
+            "estimated_budget_bytes": 168720000000
+          },
+          "versions": {
+            "cuml": "26.06.00",
+            "cupy": "14.1.1",
+            "numpy": "2.4.6"
+          }
+        },
+        {
+          "run_id": "2f1cf560024f4ef6a6e14be454301526",
+          "status": "ok",
+          "configuration": {
+            "dire": {
+              "cuvs_index": "ivf_pq",
+              "iterations": 128,
+              "negative_sample_ratio": 8,
+              "normalize": false,
+              "repo": "/home/igor/devel/dire-rapids"
+            },
+            "init": "random",
+            "method": "dire",
+            "neighbors": 16,
+            "rows": 10000000,
+            "seed": 0,
+            "target_dimension": 8
+          },
+          "timeout_seconds": 3600,
+          "layout_logical_data_sha256": "c6175a9397826b97a2eb5f07e1c77cb36a8538f4da8e6096bdce2d581a04d8c8",
+          "versions": {
+            "cuml": "26.06.00",
+            "cupy": "14.1.1",
+            "cuvs": "26.06.00",
+            "dire_rapids": "0.3.0",
+            "numpy": "2.4.6",
+          "torch": "2.11.0+cu130"
+        }
+      },
+      {
+        "run_id": "45d4b8a339e84f3a8951f8c1827b386a",
+        "status": "cuda_oom",
+        "configuration": {
+          "dire": {
+            "cuvs_index": "ivf_pq",
+            "iterations": 128,
+            "negative_sample_ratio": 8,
+            "normalize": false,
+            "repo": "/home/igor/devel/dire-rapids"
+          },
+          "init": "random",
+          "method": "dire",
+          "neighbors": 16,
+          "rows": 100000000,
+          "seed": 0,
+          "target_dimension": 8
+        },
+        "timeout_seconds": 3600,
+        "observed_attempt_failure": true,
+        "timed_out": false,
+        "error": {
+          "cause": "cuda_memory_exhaustion",
+          "type": "OutOfMemoryError",
+          "phase": "fit",
+          "requested_allocation_bytes": 102400000000,
+          "requested_allocation_gib_reported": 95.37,
+          "gpu_total_gib_reported": 94.50,
+          "gpu_free_gib_reported": 75.53
+        },
+        "timing": {
+          "worker_total_seconds": 2694.379729813998,
+          "worker_wall_seconds": 2695.681295872004
+        },
+        "resources": {
+          "application_peak_rss_bytes": 211104759808,
+          "gpu_process_peak_bytes": 63600328704,
+          "gpu_process_incremental_peak_bytes": 63025709056,
+          "gpu_baseline_bytes": 574619648,
+          "sampling_interval_seconds": 0.1,
+          "failed_allocation_became_resident": false
+        },
+        "preflight": {
+          "warning": true,
+          "named_tensor_bytes": 163200000000,
+          "configured_negative_indices_int64_bytes": 102400000000,
+          "estimated_budget_bytes": 244800000000,
+          "disposition": "warning_then_fit_attempted"
+        },
+        "layout": null,
+        "source_unchanged_parent": true,
+        "versions": {
+          "cuml": "26.06.00",
+          "cupy": "14.1.1",
+          "cuvs": "26.06.00",
+          "dire_rapids": "0.3.0",
+          "numpy": "2.4.6",
+          "torch": "2.11.0+cu130"
+        }
+      }
+      ]
+    },
+    "retrieval": {
+      "name": "exact-layout-retrieval-v1",
+      "recall_definition": "mean per-query set intersection with first k original-space ground-truth IDs divided by k",
+      "tie_policy": "strict ID intersection; alternative IDs tied in original-space distance are not credited",
+      "query_selection": "leading public-query prefix",
+      "host_memory_budget_gib": 2,
+      "disk_reserve_gib": 1,
+      "input_layouts": {
+        "ae_10m_cpu_fp32_base": {
+          "path": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+          "sha256": "95e276afd239d6f068d72067d4ece4e657e6f904b301b6b0ec00961dc0ef5b0c"
+        },
+        "ae_10m_cpu_fp32_query": {
+          "path": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/query-layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+          "sha256": "43e4b4ad41b741e75c628a6912e09768306c7892e5fd867c23c4c0731b25528f"
+        },
+        "ae_100m_gpu_fp32_base": {
+          "path": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/layout.a08abffe166e4785b972c1060d71e8d4.npy",
+          "sha256": "84ed0e2cf80569467fd34d5d13e7246402467148b6ee5b7ade1bd75d20212164"
+        },
+        "ae_100m_gpu_fp32_query": {
+          "path": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/query-layout.a08abffe166e4785b972c1060d71e8d4.npy",
+          "sha256": "3b9dd5d0249a1d67fef97818a9b0a3352f3ac6d3b9399acdc9bc7377d47f5830"
+        }
+      },
+      "runs": [
+        {
+        "base_rows": 10000000,
+        "base_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/query-layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_count": 100,
+        "k": 10,
+          "engine": "numpy-cpu-float64-distance",
+          "metric": "squared_euclidean",
+          "tie_break": "ascending_base_row_id",
+          "query_batch_size_requested": 16,
+          "query_batch_size_effective": 16,
+          "base_block_rows_requested": 131072,
+          "base_block_rows_effective": 131072,
+          "base_stream_passes": 1,
+          "ground_truth": "artifacts/data/yandex-deep1b/groundtruth.deep-10M.bin"
+        },
+        {
+        "base_rows": 10000000,
+        "base_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/query-layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_count": 100,
+        "k": 100,
+          "engine": "numpy-cpu-float64-distance",
+          "metric": "squared_euclidean",
+          "tie_break": "ascending_base_row_id",
+          "query_batch_size_requested": 16,
+          "query_batch_size_effective": 16,
+          "base_block_rows_requested": 131072,
+          "base_block_rows_effective": 131072,
+          "base_stream_passes": 1,
+          "ground_truth": "artifacts/data/yandex-deep1b/groundtruth.deep-10M.bin"
+        },
+        {
+        "base_rows": 10000000,
+        "base_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/query-layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_count": 1000,
+        "k": 10,
+          "engine": "numpy-cpu-float64-distance",
+          "metric": "squared_euclidean",
+          "tie_break": "ascending_base_row_id",
+          "query_batch_size_requested": 16,
+          "query_batch_size_effective": 16,
+          "base_block_rows_requested": 131072,
+          "base_block_rows_effective": 131072,
+          "base_stream_passes": 1,
+          "ground_truth": "artifacts/data/yandex-deep1b/groundtruth.deep-10M.bin"
+        },
+        {
+        "base_rows": 10000000,
+        "base_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_layout": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/query-layout.42e1965fe7974d8eb46c016d9b8362a3.npy",
+        "query_count": 1000,
+        "k": 100,
+          "engine": "numpy-cpu-float64-distance",
+          "metric": "squared_euclidean",
+          "tie_break": "ascending_base_row_id",
+          "query_batch_size_requested": 16,
+          "query_batch_size_effective": 16,
+          "base_block_rows_requested": 131072,
+          "base_block_rows_effective": 131072,
+          "base_stream_passes": 1,
+          "ground_truth": "artifacts/data/yandex-deep1b/groundtruth.deep-10M.bin"
+        },
+        {
+        "base_rows": 100000000,
+        "base_layout": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/layout.a08abffe166e4785b972c1060d71e8d4.npy",
+        "query_layout": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/query-layout.a08abffe166e4785b972c1060d71e8d4.npy",
+        "query_count": 100,
+        "k": 10,
+          "engine": "numpy-cpu-float64-distance",
+          "metric": "squared_euclidean",
+          "tie_break": "ascending_base_row_id",
+          "query_batch_size_requested": 16,
+          "query_batch_size_effective": 16,
+          "base_block_rows_requested": 131072,
+          "base_block_rows_effective": 131072,
+          "base_stream_passes": 1,
+          "ground_truth": "artifacts/data/yandex-deep1b/groundtruth.deep-100M.bin"
+        },
+        {
+        "base_rows": 100000000,
+        "base_layout": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/layout.a08abffe166e4785b972c1060d71e8d4.npy",
+        "query_layout": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/query-layout.a08abffe166e4785b972c1060d71e8d4.npy",
+        "query_count": 100,
+        "k": 100,
+          "engine": "numpy-cpu-float64-distance",
+          "metric": "squared_euclidean",
+          "tie_break": "ascending_base_row_id",
+          "query_batch_size_requested": 16,
+          "query_batch_size_effective": 16,
+          "base_block_rows_requested": 131072,
+          "base_block_rows_effective": 131072,
+          "base_stream_passes": 1,
+          "ground_truth": "artifacts/data/yandex-deep1b/groundtruth.deep-100M.bin"
+        }
+      ]
+    },
+    "topology": {
+      "labels": null,
+      "prepared_set": {
+        "copy_block_rows": 4096,
+        "l2_atol": 0.0005,
+        "sample_size": 20000,
+        "sampling": "uniform_without_replacement_sorted",
+        "seed": 20260713,
+        "target_dimension": 8,
+        "validation_block_rows": 65536
+      },
+      "prepared_input_layouts": {
+        "autoencoder": {
+          "shape": [
+            10000000,
+            8
+          ],
+          "sha256": "50cb8a53f1527c273d4d0e57f58aee03da8a06aaaace10abeb195922c28e6c0d"
+        },
+        "dire": {
+          "shape": [
+            10000000,
+            8
+          ],
+          "sha256": "8451b3459f1e2438c5d529fca2731ddc08d87b063d09060b083c4698081ebfd5"
+        },
+        "umap": {
+          "shape": [
+            10000000,
+            8
+          ],
+          "sha256": "25307699bdf239ad94bbaf625a2dacdcfd688d091ce487b15fd6b48759a8860c"
+        }
+      },
+      "prepared_outputs": {
+        "layouts": {
+          "autoencoder": {
+            "dtype": "float32",
+            "filename": "layout-autoencoder.npy",
+            "sha256": "6f0d0dd6b7deb9264fde92323c40e9973408ee481c6960cf34c3806dba6300bb",
+            "shape": [
+              20000,
+              8
+            ],
+            "size_bytes": 640128
+          },
+          "dire": {
+            "dtype": "float32",
+            "filename": "layout-dire.npy",
+            "sha256": "700b978ea35a40b8df4febd21b339a676b2a0d20cf46be1f4d8754259ab2a645",
+            "shape": [
+              20000,
+              8
+            ],
+            "size_bytes": 640128
+          },
+          "umap": {
+            "dtype": "float32",
+            "filename": "layout-umap.npy",
+            "sha256": "6990958dc4bea4978aab4a080852741510d4c33bd1406d5d533de23e67cec1df",
+            "shape": [
+              20000,
+              8
+            ],
+            "size_bytes": 640128
+          }
+        },
+        "reference": {
+          "dtype": "float32",
+          "filename": "reference.npy",
+          "sha256": "37d6dfe98916cd3e53c3afb45208c7baefe9dc1e422b349e16e9b366a6a0df44",
+          "shape": [
+            20000,
+            96
+          ],
+          "size_bytes": 7680128
+        },
+        "source_indices": {
+          "dtype": "int64",
+          "filename": "source_indices.npy",
+          "index_sha256": "96e29e9730ca12e09e5eb1987124ac5f747f4211bc1fc42a34dbbcba0df8edfb",
+          "maximum": 9999200,
+          "minimum": 71,
+          "sha256": "02b03ccefeb0bc6ac86d7c79ccd23bbd6dfd57f50ed04a3be5d515d1b255d67c",
+          "shape": [
+            20000
+          ],
+          "size_bytes": 160128,
+          "unique": 20000
+        }
+      },
+      "evaluation": {
+        "diameter_block_size": 512,
+        "l2_atol": 0.0005,
+        "n_steps": 50,
+        "sample_size": 5000,
+        "sampling": "uniform",
+        "seeds": [
+          17,
+          29,
+          43
+        ],
+        "target_dimension": 8
+      },
+      "interpretation": "label-free sampled diagnostics from three shared evaluation samples of one fitted layout per method; not independent reducer fits or a proof of topology preservation",
+      "partition_control_100m": {
+        "labels": null,
+        "control_relation": "two 100M RAPIDS UMAP fits with identical reducer configuration and seed 0 except knn_n_clusters 16 versus 160",
+        "prepared_set": {
+          "copy_block_rows": 4096,
+          "l2_atol": 0.0005,
+          "sample_size": 20000,
+          "sampling": "uniform_without_replacement_sorted",
+          "seed": 20260713,
+          "target_dimension": 8,
+          "validation_block_rows": 65536
+        },
+        "prepared_input_layouts": {
+          "c16": {
+            "shape": [
+              100000000,
+              8
+            ],
+            "sha256": "1bef59b551dbbc4529f5c7c5ae8da795143d8e308f59612f85788f049270aa8b"
+          },
+          "c160": {
+            "shape": [
+              100000000,
+              8
+            ],
+            "sha256": "d759ff72ffb5ef9169f16378b416f0196c04adfea937302dd2db1b6c9d067299"
+          }
+        },
+        "prepared_outputs": {
+          "layouts": {
+            "c16": {
+              "dtype": "float32",
+              "filename": "layout-c16.npy",
+              "sha256": "aad5841a5a89a5413884bd8ea1d5a5ce6aa592f34ea11624cd7e48d9a6a1cbf6",
+              "shape": [
+                20000,
+                8
+              ],
+              "size_bytes": 640128
+            },
+            "c160": {
+              "dtype": "float32",
+              "filename": "layout-c160.npy",
+              "sha256": "91657bac15751207059235526bbaeaf64467c4620d9df3e6567bc91467db3cf4",
+              "shape": [
+                20000,
+                8
+              ],
+              "size_bytes": 640128
+            }
+          },
+          "reference": {
+            "dtype": "float32",
+            "filename": "reference.npy",
+            "sha256": "a7e7ee0c6595b4acd1d70f6c46115edafcfef25fc987c90eddf220c57ec346f5",
+            "shape": [
+              20000,
+              96
+            ],
+            "size_bytes": 7680128
+          },
+          "source_indices": {
+            "dtype": "int64",
+            "filename": "source_indices.npy",
+            "index_sha256": "ff49fb4c888c4acec14fc1f30a3532d869f1fedce2d18bbd2685688c8366e2f4",
+            "maximum": 99995934,
+            "minimum": 716,
+            "sha256": "a99509a8dd42fe66e90d606d169086e3c66e190becaf124d5e285c91be2a2a4f",
+            "shape": [
+              20000
+            ],
+            "size_bytes": 160128,
+            "unique": 20000
+          }
+        },
+        "evaluation": {
+          "diameter_block_size": 512,
+          "l2_atol": 0.0005,
+          "n_steps": 50,
+          "sample_size": 5000,
+          "sampling": "uniform",
+          "seeds": [
+            17,
+            29,
+            43
+          ],
+          "target_dimension": 8
+        },
+        "paired_c160_minus_c16": {
+          "dtw_beta0_by_seed": [
+            -99,
+            131,
+            -96
+          ],
+          "dtw_beta0_mean": -21.333333333333332,
+          "dtw_beta0_relative_to_c16_mean": -0.0020643829430359332,
+          "dtw_beta1_by_seed": [
+            51,
+            -40,
+            67
+          ],
+          "dtw_beta1_mean": 26.0,
+          "dtw_beta1_relative_to_c16_mean": 0.001974533579728122
+        },
+        "interpretation": "label-free matched-sample control; both beta-curve DTWs were effectively tied with mixed paired signs; one non-deterministic reducer fit per arm prevents causal attribution to cluster count"
+      }
+    }
+  },
+  "timing_and_memory_semantics": {
+    "ae_training": "streamed source-block reads; local shuffling and batching; host-to-device copies; forward/backward passes; optimizer updates",
+    "ae_encoding": "complete base-layout source read and hash; forward pass; layout write",
+    "ae_total": "preflight and validation; training; held-out evaluation; base encoding and layout writing; source validation/hash; query encoding; excludes download and final result/pointer publication",
+    "graph_fit": "backend fit_transform producing the layout",
+    "graph_worker_total": "worker-side input inspection and open; backend import where recorded; fit; layout validation and write",
+    "application_peak_rss": "process high-water resident set; graph RSS can include touched input-mmap pages; AE pread OS page cache is outside process RSS",
+    "graph_gpu_process_peak": "all NVML-reported PID allocations sampled every 0.1 seconds; total peak includes the recorded baseline and incremental peak subtracts it",
+    "ae_pytorch_peak": "PyTorch allocator counter; not total GPU-process memory",
+    "overlap_warning": "RSS GPU-process memory and allocator counters can overlap on Grace Hopper and must not be summed or interpreted as one total-memory measure"
+  },
+  "source_artifacts": [
+    {
+      "path": "artifacts/yandex-deep1b/ae-1m-d8-cpu-onepass-pread/result.json",
+      "sha256": "0a4e337c25b5a43cafcfa74408eb206851996b2425337318cdb51451f1fc0c0f"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/result.json",
+      "sha256": "8974c4e6a9a62eae7a4170ab769409bc057c794811a625eb1e9be98f204f30f2"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-10m-d8-gpu-fp32-onepass-pread/result.json",
+      "sha256": "5077f8ac4e8685f1020166a9e176c56e0c456037a5186ce882cee796fde71671"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-10m-d8-gpu-bf16-onepass-pread/result.json",
+      "sha256": "0f4d0b6f16c7b426f4d8db8587dadfab925b980cbe36b4257cc8627d08d03379"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/result.json",
+      "sha256": "f841d9f14fc5991366326ef91f48fb4d4d2c019f9a72d5b49d304a69aaa240d6"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/umap-10m-d8-gpu/result.json",
+      "sha256": "7044465f60e612ffe66cbf0b9cc4e551a150602b9f0c9e434ec458e481e2482b"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/umap-100m-d8-gpu/result.json",
+      "sha256": "16c90668b928863fe12babb14c7bcb96b532de9084c00a125d1f24beebffa6f7"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/umap-100m-d8-gpu-c160/result.json",
+      "sha256": "85a034a25d5b2b04de2a7ce21986901e2121ca24ba71346608c6491216be9af0"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/dire-10m-d8-gpu/result.json",
+      "sha256": "12a2041c55ef9389c82e1949be572f50732c8dda153c5900d7ec2c7cb7845310"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/dire-100m-d8-gpu/result.json",
+      "sha256": "c073f4460a7a2cafce2c496d2cd5c1dfd9c2578d32bf9352f6c70c3c958285d3"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/retrieval-q100-k10.json",
+      "sha256": "c7858a20443299f672dc5b841cbabc4138170fc8d91bf5937ce749cb5aedc3bc"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/retrieval-q100-k100.json",
+      "sha256": "2c6bcdea4327f58f706a96f5fa840d83cdb14c4afeaeff691a928964efcd3359"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/retrieval-q1000-k10.json",
+      "sha256": "bc28fc60a4577e5d2e9637c73a678723ed5ee76ba8361c3bec5b07dd8ea39bb9"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-10m-d8-cpu-onepass-pread/retrieval-q1000-k100.json",
+      "sha256": "ce0dcf2277e5a528c9cdc8159f225994f28dc1d1427dbbd2e9ae8a6371a90138"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/retrieval-q100-k10.json",
+      "sha256": "b2f111d313b39aff25744cafca04e1d03b3c681968cd79fc2f05d70fe5ee7863"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/ae-100m-d8-gpu-fp32-onepass-pread/retrieval-q100-k100.json",
+      "sha256": "2f36ab4aedba85f5a14d14b7d77e0c001e1e8d8987d9bf9a81b5879f6e86789e"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-10m-d8/evaluation/aggregate.csv",
+      "sha256": "94107eedd9fff2af58ff3d415577b7cf925ec8ee3166a26b26c6e8ff6a826cd7"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-10m-d8/evaluation/raw.csv",
+      "sha256": "28528c841218c68985b42aeafc42b8865ecaf435bc867d8c8016129d3d53b140"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-10m-d8/evaluation/raw.json",
+      "sha256": "fe1ac367ab1751575f3540d9410ddb90a258270ab3b30a66ee30b60f5adfaff7"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-10m-d8/prepared-bounded/manifest.json",
+      "sha256": "5047ce453a42a279cde3472de3a74e656319876ebb678d34be8b91713ed14c25"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-umap-partitions-100m/evaluation/aggregate.csv",
+      "sha256": "21171658d920a3678f1c74b3f9b8c9973ffeb484dbae034d6984d0ccbb3de435"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-umap-partitions-100m/evaluation/raw.csv",
+      "sha256": "ce2f83cf3843b4c3a8ab1d905051f30ff45f31533ef2de595cef35ee5e42305a"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-umap-partitions-100m/evaluation/raw.json",
+      "sha256": "e93204cc64d28c5a55959b0b6e726b90bb2af66015480242285e30b6880ca0e4"
+    },
+    {
+      "path": "artifacts/yandex-deep1b/topology-umap-partitions-100m/prepared-bounded/manifest.json",
+      "sha256": "632a7974e5a2bb99a16498f8cb670c733cca403ce1ed49ef4b261f21544a333a"
+    }
+  ],
+  "caveats": [
+    "download time excluded",
+    "OS page cache may have been warm",
+    "the host had about 526 GiB RAM; application buffer budgets do not bound or clear the OS page cache",
+    "one-pass AE uses roughly one local corpus read for training and one for encoding",
+    "BF16 and FP32 were single sequential runs with BF16 immediately before FP32; no BF16 speedup was observed here but intrinsic BF16 slowness is not established",
+    "all AE runs used one pass; optimizer updates therefore grow with N",
+    "one fitted graph layout and one reducer seed per graph row",
+    "UMAP used 16 clusters in the 10M-to-100M scaling comparison; a separate 100M 160-cluster control restored the estimated partition size but did not materially lower sampled GPU-process memory",
+    "the two 100M UMAP cluster-count arms are single non-deterministic NN-descent runs; small timing RSS and sampled-topology differences are not stable effect estimates",
+    "RAPIDS NN-descent graph construction is not exactly deterministic even with random_state",
+    "retrieval uses strict ID recall and does not implement official ground-truth distance-tie credit",
+    "the 10M and 100M retrieval rows use different fitted models and devices; different base/ground-truth sizes; and different query counts; they are not an N-only comparison",
+    "topology diagnostics are label-free and sample-conditional",
+    "within each topology evaluation the three 5000-point samples come from one prepared 20000-point set and overlap pairwise by about 24-26%; standard deviations are descriptive rather than independent confidence estimates",
+    "DiRe 100M is an observed CUDA OOM for the tested global negative-index implementation and parameters; it is not a preflight-only estimate or a claim about every DiRe reformulation",
+    "the full 1B base source did not fit available local disk"
+  ]
+}
