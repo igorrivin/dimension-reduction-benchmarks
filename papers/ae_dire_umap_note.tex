@@ -32,7 +32,7 @@
 \title{\textbf{Reconstruction Without Pairwise Distances:}\\
        A Large-Scale Comparison of Autoencoders, DiRe, and UMAP}
 \author{Igor Rivin}
-\date{13 July 2026}
+\date{14 July 2026}
 
 \begin{document}
 \maketitle
@@ -46,11 +46,17 @@ paragraph embeddings.  All reducers receive the same row-normalized data and are
 evaluated over three seeds using sample-conditional neighborhood fidelity, sampled
 global-distance fidelity, local decodability, label- or group-aware diagnostics, sampled
 persistence-derived diagnostics, and synchronized fit time.
+We separately test one-pass $96\to8$ scaling on exact 10-million- and 100-million-row
+prefixes of Yandex Deep1B, with bounded-memory training, exact reduced-space retrieval,
+and sampled topology diagnostics.  Controlled 10-million-row experiments then separate
+distinct training examples from optimizer exposure and trace training through 9,632
+updates.
 
 No method dominates the completed cells.  At arXiv width two, the autoencoder leads the
 rank-aware local scores, UMAP gives the best category prediction, and DiRe gives the
-lowest sampled Betti-curve discrepancies.  At width eight, the autoencoder leads every
-reported geometric score while UMAP still gives the best category prediction.  On the
+lowest sampled Betti-curve discrepancies.  At width eight, the autoencoder leads all six
+primary neighborhood, distance, and decoding scores while UMAP still gives the best
+category prediction.  On the
 Wikipedia corpus, width two divides the geometric columns among all three methods, while
 at width eight the autoencoder leads the local, distance-order, and decoding scores but
 not stress; DiRe gives the lowest global-distance stress at both widths and UMAP most
@@ -59,6 +65,20 @@ manifolds of known dimension
 finds that rounded TwoNN and autoencoder-elbow estimates agree exactly in four of nine
 seeded trials and are within one dimension in all nine, with interpretable differences
 between local and global reconstructive dimension.
+
+On Deep1B, the autoencoder gives bounded-state, approximately linear one-pass processing
+from 10 to 100 million rows.  UMAP completes at 100 million with 78.34 GB of sampled total
+GPU-process memory, while the tested DiRe fit fails on a 102.4 GB allocation.  Within the
+fixed 10-million-row control, increasing distinct training rows from 65,536 to 9.86 million
+at a common 1,204-update budget changes legacy-evaluation NMSE by only 0.20\%; observed
+pool differences are therefore small under this short protocol.  Yet a frozen tune-only
+sweep finds
+no qualifying plateau under its prespecified NMSE flatness rule through 9,632 updates and
+shows a descriptive pool-by-budget separation: the one-million-row pool ends at lower tune
+NMSE than the 65,536-row pool (.3956 versus .4060).  Strict-ID recall
+remains low---Recall@10 and Recall@100 are .0358 and .0677 for the 10-million-row one-pass
+layout---so systems scalability is not nearest-neighbor adequacy.  These are
+implementation- and protocol-specific observations.
 
 The sampled topology comparison is similarly conditional on corpus and width.  DiRe
 leads both Betti-curve discrepancies for arXiv at width two; at width eight the
@@ -93,7 +113,7 @@ retains.
 
 \section{Data, reducers, and protocol}
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \small
 \begin{tabular}{lrrrll}
@@ -170,6 +190,73 @@ reconstruction statistics.  Source loading, row normalization, library import, d
 comparison metrics, and the final layout-file flush are outside ``fit.''  One-time data
 preparation took 2.58 seconds for arXiv and 10.05--14.59 seconds across the two Wikipedia
 runs; it may be reused across target widths.
+
+\paragraph{Deep1B scaling pilot.}
+The separate scaling experiment uses exact leading 10-million- and 100-million-row
+prefixes of Yandex Deep1B, whose one billion 96-dimensional GoogLeNet image descriptors
+were PCA-compressed, row-normalized, and released with public queries and Euclidean
+nearest-neighbor ground truth \cite{babenko2016,yandexdeep1b}.  Every pilot layout has
+$d=8$.  The autoencoder is
+\[
+96\!\to\!256\!\to\!128\!\to\!32\!\to\!8\!\to\!32\!\to\!128\!\to\!256\!\to\!96,
+\]
+with 124,328 parameters, batch size 8,192, and the same MSE, AdamW learning rate, and
+weight decay as above.  One pass is made over each local-file prefix; a fixed uniform
+65,536-row validation sample is excluded from training.  Bounded \texttt{preadv} blocks
+feed the model without persistently mapping the corpus.  The layout is produced in a
+second bounded pass, so ``streaming'' here means bounded local-file access, not a network
+stream or a single read of each row.
+
+\paragraph{Deep1B training-pool and update-budget controls.}
+The training-pool control fixes the 10-million-row source universe and the architecture,
+optimizer, batch size, and deterministic FP32 arithmetic above.  The original 65,536-row
+holdout becomes a fixed legacy evaluation cohort; a new disjoint 65,536-row tune cohort
+selects checkpoints.  Five training pools---65,536, 262,144, 1,048,576, 4,194,304, and
+9,863,168 rows---are nested prefixes of one uniformly shuffled complement.  Seeds
+1729--1731 pair initial weights across pools.  Every fixed-budget arm receives exactly
+1,204 updates, or 9,863,168 row presentations, while a separate checkpoint records the
+end of the first pool pass.  Tune NMSE is inspected on a common 32-update grid and the
+legacy cohort is evaluated only after tune-only selection.  Geometry uses fixed legacy
+subsets, and strict retrieval is a descriptive seed-1729 spot check for three pools.
+
+The update-budget discovery follows uninterrupted trajectories for the 65,536- and
+1,048,576-row pools under the same three seeds.  It uses only the tune cohort and fixed
+tune-cohort geometry subsets; the legacy cohort is not materialized.  A frozen grid
+extends through 4,816 updates and, after its terminal region fails a prespecified
+flatness check, once more through 7,224 and 9,632.  Signed within-seed degradation is
+measured against the terminal checkpoint.  Practical margins are 1\% relative for
+reconstruction and local-decoder NMSE, .005 absolute for reconstruction cosine,
+exact-neighbor overlap,
+and stress, .002 for trustworthiness and continuity, and .010 for pair-distance
+Spearman correlation.  A candidate must pass every margin, no seed may exceed twice a
+margin, and the next two checkpoints must also pass.  These are engineering tolerances,
+not formal equivalence bounds.  Update 1,204 exactly replays the earlier model states and
+tune metrics.  No discovery checkpoint advances, so the planned fresh-seed legacy
+confirmation is not run.
+
+At each graph-method scale, UMAP and DiRe receive one seed-0 random-initialized fit with
+$k=16$.  UMAP uses RAPIDS 26.06 NN-descent with 16 clusters; a 160-cluster control at
+100 million rows restores the estimated per-partition size used at 10 million.  DiRe
+0.3.0 uses its cuVS IVF-PQ path, 128 iterations, and negative-sample ratio eight.  The
+autoencoder uses seed 1729.  These are single-run systems observations, not three-seed
+comparisons.  Each completed arm contributes one fitted layout; the failed
+100-million-row DiRe arm contributes none.  All run on the same GH200, but memory scopes
+differ: autoencoder GPU memory is PyTorch
+peak allocated memory, whereas graph-method GPU memory is sampled through NVML as both
+a complete process total and an increment above a measured baseline; the scaling table
+uses the latter.  Application RSS is a separate process high-water mark.  The table
+captions and discussion preserve these distinctions rather than adding the scopes.
+
+Autoencoder training time includes bounded source reads, local shuffling and batching,
+host-to-device copies, forward and backward passes, and optimizer updates.  Encoding
+includes a complete source read, hashing, forward passes, and layout writing; the broader
+AE total also includes preflight, holdout evaluation, source validation, and public-query
+encoding.  Graph fit is the backend \texttt{fit\_transform}; graph worker time additionally
+includes import, bounded input inspection, layout validation, and writing.  Download is
+excluded.  Graph RSS can include pages touched through a read-only input memory map,
+whereas the OS page cache induced by the autoencoder's positional reads lies outside its
+process RSS.  NVML process memory is sampled every 0.1 seconds.  Sequential local-file
+runs may benefit from uncontrolled page-cache state.
 
 \section{Evaluation metrics}
 
@@ -270,6 +357,24 @@ excluded, leaving an eligible set $E$ of 2,895 anchors.  We report
 \end{align}
 The last quantity is explicitly a \emph{truncated} recall: it can reach one for a large
 article after retrieving 16 mates, even if additional same-article paragraphs remain.
+
+\subsection{Deep1B strict-ID retrieval}
+
+For public query $i$, let $G_i^k$ be the first $k$ official original-space
+ground-truth IDs and let $L_i^k$ be the $k$ nearest IDs found by exact search in the
+autoencoder's eight-dimensional layout.  For a leading query prefix $Q$, we report
+\begin{equation}
+ \operatorname{Recall@}k
+ =\frac{1}{|Q|k}\sum_{i\in Q}\left|L_i^k\cap G_i^k\right|,
+ \qquad k\in\{10,100\}.
+ \label{eq:deep-recall}
+\end{equation}
+The search makes one bounded scan of the complete base layout, uses float64 squared
+Euclidean distances, and maintains bounded per-query top-$k$ state.  It is strict ID
+recall: alternative IDs tied in original-space distance receive no credit.  This tests
+neighbor identity after compression, not approximate-search speed or reconstruction
+error.  Retrieval was evaluated only for the autoencoder and therefore supplies no
+cross-reducer retrieval ranking.
 
 \subsection{Native autoencoder reconstruction}
 
@@ -388,6 +493,15 @@ and the Gini coefficient
 These are descriptions, not distances to the input, and have no universal better
 direction.
 
+For Deep1B, one already-fitted 10-million-row layout per method is uniformly reduced to
+a common 20,000-row prepared set.  Three shared uniform 5,000-row samples use evaluation
+seeds 17, 29, and 43 and otherwise follow Equation~\eqref{eq:betti} and the same 50-step
+FastDTW protocol.  The samples overlap by approximately 24--26\%, so their standard
+deviations are descriptive rather than independent uncertainty estimates.  They are
+evaluation samples from one reducer fit per method, not three reducer fits.  The
+100-million-row UMAP cluster-count control is evaluated analogously on a separate common
+20,000-row prepared set.  Deep1B has no class labels in this evaluation.
+
 \section{Results}
 
 Boldface in the following tables marks only the best observed three-seed mean; it is not
@@ -502,7 +616,7 @@ express exact article identity rather than broad semantic categories.  The winni
 for every Table~\ref{tab:wikipedia} width-eight metric is unchanged across the three
 seeds; the largest listed sample standard deviation is 0.018 for autoencoder stress.
 
-All three reducers improve every reported Wikipedia quality metric when moving from two
+All three reducers improve every metric in Table~\ref{tab:wikipedia} when moving from two
 to eight coordinates.  The autoencoder changes most sharply: stress falls from .747 to
 .362, pair correlation doubles from .230 to .459, and article hit rate rises from .050
 to .283.  UMAP remains the article-group leader at both widths, reaching .754 hit rate at
@@ -671,6 +785,219 @@ These are implementation measurements on a GH200, not hardware-independent compl
 constants.  The graph reducers also avoid quadratic behavior, but do so through
 approximate indexing and sparse operations rather than dense GEMMs.
 
+\subsection{Deep1B scaling: bounded autoencoder state through 100 million rows}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.0pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrllrrrrl}
+\toprule
+Method/configuration & Rows & Core (s) & AE encode (s) & Total/worker (s) &
+RSS (GB) & Torch alloc. (GB) & NVML increment (GB) & Outcome\\
+\midrule
+AE FP32             & $10^7$ & 5.45 train  & 3.19  & 12.16   & 1.48   & .150 & --    & NMSE .45293\\
+AE FP32             & $10^8$ & 52.86 train & 31.71 & 88.18   & 2.02   & .150 & --    & NMSE .39255\\
+UMAP, 16 clusters   & $10^7$ & 66.40 fit   & --    & 68.82   & 12.13  & --   & 7.92  & complete\\
+UMAP, 16 clusters   & $10^8$ & 861.46 fit  & --    & 874.79  & 104.48 & --   & 77.77 & complete\\
+UMAP, 160 clusters  & $10^8$ & 836.65 fit  & --    & 847.41  & 102.07 & --   & 77.84 & complete\\
+DiRe                 & $10^7$ & 158.14 fit  & --    & 161.46  & 19.82  & --   & 29.06 & complete\\
+DiRe                 & $10^8$ & --          & --    & 2694.38 & 211.10 & --   & 63.03 & CUDA OOM\\
+\bottomrule
+\end{tabular}}
+\caption{Single-run Deep1B GPU scaling measurements; memory values are decimal GB.
+``Core'' means autoencoder training or graph \texttt{fit\_transform}.  Autoencoder total
+and graph worker time have the broader, method-specific scopes defined in the protocol.
+PyTorch allocator memory and incremental NVML process memory are different scopes and
+should not be treated as a common total-memory measurement.  The failed DiRe allocation
+never became resident.}
+\label{tab:deep-scaling}
+\end{table}
+
+From 10 million to 100 million rows, FP32 autoencoder training and encoding take
+$9.71\times$ and $9.94\times$ as long, respectively.  Application peak RSS rises from
+1.48 to 2.02 GB, while PyTorch peak allocated memory is exactly 150,232,064 bytes in
+both runs.  The unavoidable float32 layout grows from 0.32 to 3.20 GB.  These
+measurements support approximately linear work with bounded model and minibatch state
+for this one-pass implementation.  They do not imply literally unbounded scaling:
+input I/O, output storage, and every additional pass still grow with $N$.  Held-out NMSE
+falls from .45293 to .39255, but the runs make 1,221 and 12,208 optimizer updates;
+the change therefore combines more data with more optimization and is not a controlled
+sample-size-only quality comparison.  The controls below show that distinct-pool effects
+are small at 1,204 updates and that a descriptive tune-cohort separation appears under
+longer optimization; they do not identify a causal decomposition for the separate
+100-million-row run.
+
+UMAP also completes at 100 million rows.  With 16 clusters, fit time grows by
+$12.97\times$, application RSS from 12.13 to 104.48 GB, and incremental GPU-process
+memory from 7.92 to 77.77 GB.  Holding the cluster count fixed also lets the estimated
+overlap-aware partition grow from 1.25 million to 12.5 million rows.  Raising the
+100-million-row cluster count to 160 restores the estimated partition to 1.25 million
+rows and reduces its estimated input from 4.8 to 0.48 GB, but the incremental GPU peak
+remains 77.84 GB.  This control points to global graph/layout state, rather than
+partition input alone, as the dominant measured peak.  With one non-deterministic
+NN-descent fit per arm, the small timing and RSS changes do not establish a stable
+cluster-count effect.
+
+The tested DiRe configuration completes at 10 million rows, but its worker fails after
+2,694.38 seconds during the 100-million-row fit; the backend returns no fit time.  The
+recorded failure is a request for a
+102.4 GB (95.37 GiB) full negative-index tensor on a 94.50 GiB GPU.  It is an observed
+limit of the tested cuVS-backed vectorized-force path with $k=16$, negative ratio eight,
+and 128 iterations, not a claim that every partitioned or reformulated DiRe
+implementation must fail at this scale.  The pilot ceiling is 100 million, not one
+billion: the full base file requires 384 GB and its float32 eight-dimensional layout
+another 32 GB, while only 218.4 GB of local filesystem space was available when the
+bundle was created.
+
+\begin{table}[ht]
+\centering
+\begin{minipage}[t]{0.47\textwidth}
+\centering
+\scriptsize
+\textbf{(a) Exact AE-layout retrieval}\\[0.35em]
+\begin{tabular}{rrr}
+\toprule
+Base / queries & Recall@10 & Recall@100\\
+\midrule
+$10^7$ / 100   & .0300 & .0595\\
+$10^7$ / 1,000 & .0358 & .0677\\
+$10^8$ / 100   & .0210 & .0449\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.47\textwidth}
+\centering
+\scriptsize
+\textbf{(b) 10M sampled topology}\\[0.35em]
+\begin{tabular}{lrr}
+\toprule
+Method & FastDTW($\beta_0$) & FastDTW($\beta_1$)\\
+\midrule
+Autoencoder & $1628\pm219$ & $1954\pm91$\\
+DiRe        & $4167\pm304$ & $10940\pm292$\\
+UMAP        & $8943\pm1138$ & $13528\pm379$\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\caption{Deep1B quality diagnostics.  Panel (a) is AE-only strict ID recall under
+Equation~\eqref{eq:deep-recall}; 10 million uses a CPU-trained model and 100 million a
+GPU-trained model.  All rows use leading public-query prefixes, with query count as
+shown.  Panel (b) gives
+means$\pm$sample standard deviations across three shared 5,000-point evaluation samples
+from one fitted 10-million-row layout per method; its autoencoder layout is also the
+CPU-trained arm.  Lower FastDTW is preferable subject to the sampled-topology
+qualifications in the text.}
+\label{tab:deep-quality}
+\end{table}
+\FloatBarrier
+
+The retrieval result is deliberately sobering.  Even the larger 10-million-row query
+arm recovers only 3.58\% of the first ten official IDs and 6.77\% of the first hundred.
+The apparent decrease at 100 million is not a controlled row-count effect: base and
+ground truth change, query counts differ, and the two layouts use CPU- and GPU-trained
+models.  More importantly, strict neighbor identity and reconstruction MSE ask different
+questions.  Fast bounded-state training does not make their answers equivalent.
+
+The autoencoder has the smallest sampled Betti-curve discrepancy in both 10-million-row
+columns, but finite-$H_0$ descriptions are mixed: it is closest to the reference in
+top-five-to-median ratio and Gini coefficient, while UMAP is closest in longest finite
+$H_0$ bar.  With one fitted layout per method and overlapping evaluation samples, these
+are descriptive differences rather than a definitive topology ranking.  At 100 million
+rows, the UMAP 16- and 160-cluster controls are effectively tied: their
+$(\beta_0,\beta_1)$ FastDTW means are $(10334.0,13167.7)$ and
+$(10312.7,13193.7)$.  Paired changes have mixed signs and average only $-0.206\%$ and
+$+0.197\%$, giving no evidence here of a material cluster-count topology effect.
+
+The 10-million-row BF16 arm supplies one further small-network caution.  BF16 slows
+training by 15.7\% (6.30 versus 5.45 seconds) and total time by 7.7\%, while held-out
+NMSE changes from .45293 to .45339 and PyTorch peak allocated memory falls from 150.2
+to 122.5 MB.  BF16 ran immediately before FP32, so cache and order effects are not
+controlled; this supports shape-dependent overhead, not an intrinsic BF16 slowdown.
+
+\subsection{Deep1B controls: distinct rows versus optimizer exposure}
+
+The one-pass quality curve changes both the number of distinct examples and the number
+of optimizer updates.  Table~\ref{tab:deep-pool-control} separates those variables on the
+fixed 10-million-row universe.  Its one-pass tune column reproduces the steep apparent
+sample-size response: NMSE falls from 1.01715 after eight updates to .45507 after 1,204.
+When all arms instead receive 1,204 updates, tune and legacy-evaluation reconstruction
+become nearly flat across five nested pools.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rrrrrr}
+\toprule
+Distinct pool & One-pass updates & Effective passes & One-pass tune NMSE &
+Fixed-budget tune NMSE & Selected legacy NMSE\\
+\midrule
+65,536    & 8     & 150.500 & $1.01715\pm.00195$ & $.45586\pm.00200$ & $.45514\pm.00177$\\
+262,144   & 32    & 37.625  & $.99500\pm.00525$ & $.45480\pm.00167$ & $.45384\pm.00161$\\
+1,048,576 & 128   & 9.406   & $.81228\pm.01432$ & $.45450\pm.00219$ & $.45366\pm.00203$\\
+4,194,304 & 512   & 2.352   & $.51782\pm.00080$ & $.45466\pm.00227$ & $.45381\pm.00208$\\
+9,863,168 & 1,204 & 1.000   & $.45507\pm.00235$ & $.45507\pm.00235$ & $.45422\pm.00227$\\
+\bottomrule
+\end{tabular}}
+\caption{Deep1B training-pool control; entries are mean$\pm$sample standard deviation
+over three paired initialization seeds.  Every fixed-budget arm sees exactly 9,863,168
+row presentations.  The tune columns share one cohort; legacy evaluation occurs only
+after tune-only checkpoint selection.  The one-pass column deliberately varies both
+distinct rows and update count.}
+\label{tab:deep-pool-control}
+\end{table}
+
+At the common budget, the five legacy NMSE means span only .45366--.45514.  The
+65,536-row value is .000918, or 0.20\%, above the 9,863,168-row value.  Endpoint geometry
+changes are also small: trustworthiness .96160 to .96292, continuity .97062 to .97107,
+overlap .31026 to .31143, pair-distance Spearman .49548 to .50434, stress .27682 to
+.27462, and local-decoder NMSE .51990 to .51959.  These are descriptive three-seed
+differences, generally comparable to initialization variation rather than evidence of
+formal equivalence.  The seed-1729 retrieval spot check is likewise nearly flat:
+Recall@10 is .0343 versus .0349 and Recall@100 is .0656 versus .0679 for the smallest
+and largest pools.
+
+The fixed 1,204-update result does not establish that 65,536 rows or 1,204 updates are
+universally sufficient.  Figure~\ref{fig:deep-budget} extends the primary 65,536-row pool
+and a 1,048,576-row robustness pool through 9,632 uninterrupted updates.  Discovery is
+tune-only, and every update-1,204 state exactly reproduces the preceding experiment.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{deep1b_ae_update_budget_curves.pdf}
+\caption{Deep1B update-budget discovery.  Curves are means and shaded bands are sample
+standard deviations over three paired seeds.  The dashed line marks the exact
+1,204-update replay anchor and the dotted line the tested 9,632-update terminal
+reference.  Reconstruction and geometry use only the tune cohort and its fixed samples.
+No checkpoint satisfies the prespecified sustained-pass gate; the terminal reference is
+not an established optimum.}
+\label{fig:deep-budget}
+\end{figure}
+\FloatBarrier
+
+Relative to 9,632 updates, 1,204-update tune NMSE is 12.3\% worse for the 65,536-row
+pool and 14.9\% worse for the one-million-row pool.  Trustworthiness and exact overlap
+rise while stress and local-decoder NMSE fall over the same trajectories.  Optimizer
+time grows from about 4.5 to 35.3 seconds per trajectory on the GH200.  The final
+7,224-to-9,632 NMSE changes remain .462\% and 1.077\%, both above the frozen .25\%
+flatness threshold.  Thus no qualifying plateau under the frozen tune-NMSE rule and no
+stopping candidate are identified through the tested cap; neither fresh-seed legacy
+confirmation nor long-budget retrieval is run.
+
+Longer optimization also yields a descriptive tune-cohort pool-by-budget separation.  At
+1,204 updates the two pools are nearly tied, whereas at 9,632 the one-million-row pool has
+lower NMSE (.39564 versus .40596), higher overlap (.36872 versus .36244), and lower
+stress (.25176 versus .25611).  The defensible conclusion is therefore conditional:
+observed differences between pools are small at the short common budget in this fixed
+draw, while the larger pool is associated with better tune metrics under longer
+optimization.  Whether
+that separation repeats on the legacy cohort and fresh seeds is untested.  One-pass
+throughput, sample efficiency, and time to matched quality are different estimands.
+
 \subsection{BF16 sensitivity: tested margins pass, topology is mixed, and speed is
 model-size dependent}
 
@@ -735,6 +1062,11 @@ descriptive; the microprofile independently reproduces the workload crossover.
 
 \subsection{Longer MSE optimization is not a geometry rule}
 
+The Deep1B sweep asks whether a shorter run reproduces a longer MSE-trained reference
+on monitored reconstruction and local-geometry diagnostics.  The following sensitivity
+check asks a different question: whether further MSE optimization improves every notion
+of a useful layout.
+
 \begin{table}[ht]
 \centering
 \scriptsize
@@ -759,8 +1091,8 @@ some local scores, while several global and sampled-topology scores worsen.}
 \label{tab:sensitivity}
 \end{table}
 
-For these two original cells, reconstruction convergence is therefore not a universal
-stopping criterion for a useful layout.  Longer training improves native MSE,
+For these two original cells, lower reconstruction error is therefore not a universal
+indicator of a more useful layout.  Longer training improves native MSE,
 trustworthiness, and exact overlap, but reduces continuity and pair-rank correlation,
 worsens stress, and gives mixed or worse sampled Betti-curve discrepancies.  No analogous
 400-epoch claim is made for the crossed target widths.  A geometry-aware autoencoder
@@ -769,7 +1101,7 @@ simple pointwise MSE experiment studied here.
 
 \section{Conclusions and limitations}
 
-The reducer results support six narrow conclusions.
+The reducer results support seven narrow conclusions.
 \begin{enumerate}
   \item A small MSE autoencoder is computationally practical at 723,000--1,000,000 rows
         in this GH200 configuration.  Its favorable timing is consistent with
@@ -778,6 +1110,20 @@ The reducer results support six narrow conclusions.
         margins, while its sampled-topology response is mixed.  Its speed is
         shape-dependent: it nearly halves Wikipedia training time and slightly slows the
         smaller arXiv model.
+  \item The separate Deep1B pilot supports bounded-state, approximately linear one-pass
+        autoencoder processing through 100 million rows.  UMAP also completes at that
+        scale, but with graph/layout memory that grows strongly with $N$; the tested
+        DiRe path reaches a configuration-specific CUDA OOM.  At the common 1,204-update
+        budget, five nested training pools have legacy NMSE means between .45366 and
+        .45514; the steep tune-cohort one-pass curve therefore cannot be interpreted as a
+        sample-size-only effect.  This is not a universal 65,536-row sufficiency result:
+        no qualifying plateau is observed under the frozen tune-NMSE rule through 9,632
+        updates, and
+        the one-million-row pool has descriptively better tune metrics than 65,536 rows
+        under longer optimization, without fresh-seed legacy confirmation.  Strict-ID
+        recall
+        remains low, so systems scalability and nearest-neighbor utility must be assessed
+        independently.  Storage limits prevented a one-billion-row run.
   \item Plain reconstruction can preserve sampled local geometry and decodability very
         well without an explicit pairwise objective.  This does not guarantee strong
         label/group organization: UMAP wins arXiv category prediction at both widths and
@@ -791,9 +1137,11 @@ The reducer results support six narrow conclusions.
         between TwoNN local dimension and the AE reconstruction elbow.  Their systematic
         circle difference illustrates why local and global reconstructive dimension must
         be interpreted separately.
-  \item More MSE optimization is not automatically better dimension reduction.
-        Reconstruction, local ranks, global distances, labels, and sampled topology can
-        move in different directions in the two original sensitivity cells.
+  \item More MSE optimization is not a universal stopping rule or geometry objective.
+        Deep1B reconstruction and monitored local geometry improve through the tested
+        budget, whereas the two original text-corpus sensitivity cells show that better
+        MSE and local scores can accompany worse global-distance or sampled-topology
+        scores.
   \item Sampled topology has no universal method or width ordering here.  The arXiv
         width-eight autoencoder improves markedly in $\beta_0$ but worsens in $\beta_1$;
         the Wikipedia width-eight autoencoder improves in both.  These completed cells
@@ -809,17 +1157,41 @@ clouds and cloud-specific curve grids.  The three-seed comparisons are descripti
 formal uncertainty quantification, and two target widths cannot identify a general
 dimension-response curve.  The controlled dimension check uses small synthetic
 manifolds and does not estimate the intrinsic dimension of either text corpus.
+The Deep1B scaling arms add further asymmetries: each completed arm contributes one
+fitted layout, the failed DiRe arm contributes none, the autoencoder receives one pass,
+and UMAP NN-descent is not exactly deterministic.  Local-file page
+cache was not controlled, and timing and memory scopes differ across implementations.
+Strict-ID retrieval was evaluated only for the autoencoder and gives no alternative-ID
+distance-tie credit.  Finally, 100 million is the tested storage-limited ceiling, not
+evidence from a billion-row execution.
+
+The Deep1B controls are also narrow.  The pool-size study uses one nested training-pool
+draw, one $96\to8$ architecture, one 1,204-update budget, and three initialization
+seeds; it does not test reconstruction-elbow stability.  Long-budget discovery uses only
+the 65,536- and 1,048,576-row pools and the tune cohort.  Because no candidate advances,
+there is no fresh-seed legacy or retrieval confirmation, no long-budget topology or
+label test, and no evidence beyond 9,632 updates.  Neither 1,204 nor 9,632 is an
+established optimum.  The practical margins are engineering choices, and optimizer
+timing excludes repeated geometry evaluation and remains GH200-specific.  No reducer is
+tuned to matched quality or convergence.
 
 \section*{Reproducibility}
 
-The companion \emph{dimension-reduction-benchmarks} repository
+The public companion \emph{dimension-reduction-benchmarks} repository
 \cite{benchmarkrepo} provides the benchmark,
-topology, and controlled-dimension implementations together with compact result tables
-and machine-readable figure provenance.  The supplementary records retain exact
-environment information, checksums, sample identities, and complete topology curves;
-those audit identifiers are intentionally kept out of the public-facing narrative.
+topology, controlled-dimension, and Deep1B scaling, training-pool, and optimizer-budget
+implementations together with compact result tables and machine-readable provenance.
+The controlled-study supplements include public-safe CSV summaries, the frozen
+update-budget protocol, replay verification, and PDF figures.  Raw Deep1B arrays,
+checkpoints, and generated layouts are not included.  The supplementary records identify
+the official sources, prefix derivations, environment, configurations, timing scopes,
+checksums, sample identities, failure state, and topology summaries; the text-corpus
+supplements also retain complete topology curves.  Those audit identifiers are
+intentionally kept out of the public-facing narrative.
+The compact Deep1B bundle is the record of the reported runs and pins the historical
+run-harness identities; live convenience harnesses may evolve independently.
 
-\begin{thebibliography}{12}
+\begin{thebibliography}{99}
 \bibitem{hinton2006}
 G.~E. Hinton and R.~R. Salakhutdinov,
 ``Reducing the dimensionality of data with neural networks,''
@@ -872,10 +1244,23 @@ Cohere Labs,
 \href{https://huggingface.co/datasets/CohereLabs/wikipedia-2023-11-embed-multilingual-v3}
 {Hugging Face dataset card} (accessed July 2026).
 
+\bibitem{babenko2016}
+A. Babenko and V. Lempitsky,
+``Efficient indexing of billion-scale datasets of deep descriptors,''
+in \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition}
+(2016), pp. 2055--2063.
+
+\bibitem{yandexdeep1b}
+D. Baranchuk and A. Babenko,
+``Benchmarks for billion-scale similarity search,''
+Yandex Research, 26 April 2021,
+\url{https://research.yandex.com/blog/benchmarks-for-billion-scale-similarity-search}.
+
 \bibitem{benchmarkrepo}
 I. Rivin,
 \emph{dimension-reduction-benchmarks: autoencoder, DiRe, and UMAP experiments},
-\url{https://github.com/igorrivin/dimension-reduction-benchmarks} (2026).
+companion software and data repository (2026),
+\url{https://github.com/igorrivin/dimension-reduction-benchmarks}.
 \end{thebibliography}
 
 \end{document}
