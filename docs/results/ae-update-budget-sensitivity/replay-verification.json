@@ -1,0 +1,270 @@
+{
+  "all_required_identities_match": true,
+  "anchor_update": 1204,
+  "checks": {
+    "all_trajectory_replays_verified": true,
+    "configuration_identity": true,
+    "discovery_phase": true,
+    "discovery_protocol": true,
+    "discovery_status": true,
+    "expected_discovery_trajectories_present": true,
+    "expected_prior_arms_present": true,
+    "prior_protocol": true,
+    "prior_status": true,
+    "protocol_document_bound": true,
+    "shuffle_seed_offset_identity": true,
+    "source_identity": true,
+    "split_identity": true
+  },
+  "discovery_results_sha256": "0f70a82d048c1c3c2392bff8257c7a5678b465135041ad45a2c36bfd4a3c235b",
+  "external_prior_result_checked": true,
+  "generated_at_utc": "2026-07-14T21:14:08.376525+00:00",
+  "identities": {
+    "configuration_sha256": "ba4209df10bfcb9b97ae60c7f85ac8899bd77d5dc45600c5623b3468191fb904",
+    "source": {
+      "dimension": 96,
+      "dtype": "little-endian float32",
+      "file_bytes": 3840000008,
+      "file_sha256": "a8653d77b20e63434f4ff9ac5607a3f24c98e5a3ceb7fc6e90abeb5bcf8b5c7e",
+      "format": "fbin",
+      "input_transformation": "none",
+      "rows": 10000000,
+      "universe_policy": "fixed leading prefix",
+      "universe_rows": 10000000
+    },
+    "split_sha256": "0b8d68ccbf5ed50b15ab7a72e264a090284cc3ba85b103ea4ffbf055413bf8a8"
+  },
+  "inputs": {
+    "discovery_results": {
+      "file_sha256": "0f70a82d048c1c3c2392bff8257c7a5678b465135041ad45a2c36bfd4a3c235b",
+      "protocol": "deep1b-ae-update-budget-sensitivity-v1"
+    },
+    "prior_checkpoints": {
+      "count": 6,
+      "manifest_sha256": "438150291c1bbed986aa18f25e8edfbe28f69c8573b181038863d2a79b35be37"
+    },
+    "prior_results": {
+      "file_sha256": "d3c098412c1eaa7cbc5f83f493c3636478fef317af2e6bd75c30e413e69cf1aa",
+      "protocol": "deep1b-ae-training-pool-sensitivity-v1"
+    }
+  },
+  "limitations": [
+    "This verifies exact replay at update 1204 only.",
+    "It does not inspect or compare legacy-cohort or geometry metrics.",
+    "It does not establish that update 1204 or any later checkpoint is optimal."
+  ],
+  "protocol": "deep1b-ae-update-budget-replay-verification-v1",
+  "protocol_document_sha256": "41db717aade5062028efd9a7e3d8d57ca238a1f06c781aaf54b06b87deea89a0",
+  "replay_verified": true,
+  "schema_version": 1,
+  "scope": {
+    "geometry_accessed": false,
+    "init_seeds": [
+      1729,
+      1730,
+      1731
+    ],
+    "legacy_cohort_accessed": false,
+    "pool_sizes": [
+      65536,
+      1048576
+    ],
+    "source_dataset_opened": false,
+    "trajectory_count": 6
+  },
+  "status": "ok",
+  "trajectories": [
+    {
+      "anchor_update": 1204,
+      "checks": {
+        "checkpoint_file_exists": true,
+        "checkpoint_metadata": true,
+        "checkpoint_safe_load": true,
+        "checkpoint_state_hashable": true,
+        "initialization_identity": true,
+        "model_state_identity": true,
+        "pool_identity": true,
+        "pool_matches_split": true,
+        "tune_reconstruction_exact": true
+      },
+      "hashes": {
+        "discovery_model_state_sha256": "4d2ce6ee48fbff08589b8bce0618be9796842e5155c9ee756e707313f6ae5b73",
+        "initial_state_sha256": "16fbaa0a27989a0c4cb14bebdbb2aeaa8b44242820ce9d0d835e719ec255a521",
+        "pool_indices_sha256": "45b40390126ff7a1ec568bcc5922bb885fa43e56153e714feb5ca6734c302d42",
+        "prior_checkpoint_file_sha256": "19a7430ee519beb0710718973a27e3dae27e20febd9c783f6c3f91ed92c5cad9",
+        "prior_model_state_sha256": "4d2ce6ee48fbff08589b8bce0618be9796842e5155c9ee756e707313f6ae5b73",
+        "tune_reconstruction_sha256": "9205adec05fd488f3ed3b4eb258b954aae4edf6b4f7ce961c1fdaa99fa7f9b84"
+      },
+      "init_seed": 1729,
+      "pool_size": 65536,
+      "replay_verified": true,
+      "tune_reconstruction": {
+        "mean_predictor_mse": 0.00969446518552356,
+        "reconstruction_cosine": 0.7502177432179451,
+        "reconstruction_mse": 0.004420696369682749,
+        "reconstruction_nmse": 0.456002088313653,
+        "rows": 65536
+      }
+    },
+    {
+      "anchor_update": 1204,
+      "checks": {
+        "checkpoint_file_exists": true,
+        "checkpoint_metadata": true,
+        "checkpoint_safe_load": true,
+        "checkpoint_state_hashable": true,
+        "initialization_identity": true,
+        "model_state_identity": true,
+        "pool_identity": true,
+        "pool_matches_split": true,
+        "tune_reconstruction_exact": true
+      },
+      "hashes": {
+        "discovery_model_state_sha256": "3de176c51b370996d20b68449bbf3bcac379dcb86dd61162aeeb250bba946962",
+        "initial_state_sha256": "2c6162e9f549618f5e48b389a6aeb29280887382cc7ad850a03a3574bc959a44",
+        "pool_indices_sha256": "45b40390126ff7a1ec568bcc5922bb885fa43e56153e714feb5ca6734c302d42",
+        "prior_checkpoint_file_sha256": "62309cc370241f361652591ece837ef095530f7f48091f475dd92eef5034cce5",
+        "prior_model_state_sha256": "3de176c51b370996d20b68449bbf3bcac379dcb86dd61162aeeb250bba946962",
+        "tune_reconstruction_sha256": "78f475080c934852291f0af1524e1def96937aaeedb8953c3fbbfd0432113500"
+      },
+      "init_seed": 1730,
+      "pool_size": 65536,
+      "replay_verified": true,
+      "tune_reconstruction": {
+        "mean_predictor_mse": 0.00969446518552356,
+        "reconstruction_cosine": 0.7518261522054672,
+        "reconstruction_mse": 0.0043992539479707675,
+        "reconstruction_nmse": 0.4537902673104686,
+        "rows": 65536
+      }
+    },
+    {
+      "anchor_update": 1204,
+      "checks": {
+        "checkpoint_file_exists": true,
+        "checkpoint_metadata": true,
+        "checkpoint_safe_load": true,
+        "checkpoint_state_hashable": true,
+        "initialization_identity": true,
+        "model_state_identity": true,
+        "pool_identity": true,
+        "pool_matches_split": true,
+        "tune_reconstruction_exact": true
+      },
+      "hashes": {
+        "discovery_model_state_sha256": "36567b25f6f89a78c22d52830d6b6f5738f669c01328290cff09f712b246eb2d",
+        "initial_state_sha256": "e6942c44e7c3a39d63c560c52e9abf40b31a842c0ff9c2026fcb4c7b64bf84df",
+        "pool_indices_sha256": "45b40390126ff7a1ec568bcc5922bb885fa43e56153e714feb5ca6734c302d42",
+        "prior_checkpoint_file_sha256": "eb69f0759c4fca9a863aaf92b4ba69daf4db670e9d58b499f28fc7202a402d6a",
+        "prior_model_state_sha256": "36567b25f6f89a78c22d52830d6b6f5738f669c01328290cff09f712b246eb2d",
+        "tune_reconstruction_sha256": "e5f4ab7da4a512de0506ed010919fc1766b739a07f71f781a94d801aa1af0c32"
+      },
+      "init_seed": 1731,
+      "pool_size": 65536,
+      "replay_verified": true,
+      "tune_reconstruction": {
+        "mean_predictor_mse": 0.00969446518552356,
+        "reconstruction_cosine": 0.749151811003685,
+        "reconstruction_mse": 0.004437965806573629,
+        "reconstruction_nmse": 0.45778345908144624,
+        "rows": 65536
+      }
+    },
+    {
+      "anchor_update": 1204,
+      "checks": {
+        "checkpoint_file_exists": true,
+        "checkpoint_metadata": true,
+        "checkpoint_safe_load": true,
+        "checkpoint_state_hashable": true,
+        "initialization_identity": true,
+        "model_state_identity": true,
+        "pool_identity": true,
+        "pool_matches_split": true,
+        "tune_reconstruction_exact": true
+      },
+      "hashes": {
+        "discovery_model_state_sha256": "d59c896c088331b1016ac328db4f9f6a0a0962f9ee8f5df085502d96cc2d5eee",
+        "initial_state_sha256": "16fbaa0a27989a0c4cb14bebdbb2aeaa8b44242820ce9d0d835e719ec255a521",
+        "pool_indices_sha256": "1900a3d06ba70b9c30bc89e6ac14e4d3b158b888fc7376b4ebaf6ee817e2c165",
+        "prior_checkpoint_file_sha256": "506ab7c3bb04de015868c856e4dd63232b870b79f3b7d278e7ba0c11884784d0",
+        "prior_model_state_sha256": "d59c896c088331b1016ac328db4f9f6a0a0962f9ee8f5df085502d96cc2d5eee",
+        "tune_reconstruction_sha256": "b587fe307d3530a706e5b3a6a3b9535ef2810c95a7b01f6afe58c9daad5deec1"
+      },
+      "init_seed": 1729,
+      "pool_size": 1048576,
+      "replay_verified": true,
+      "tune_reconstruction": {
+        "mean_predictor_mse": 0.00969446518552356,
+        "reconstruction_cosine": 0.7510602101683617,
+        "reconstruction_mse": 0.0044061785253385706,
+        "reconstruction_nmse": 0.4545045488345431,
+        "rows": 65536
+      }
+    },
+    {
+      "anchor_update": 1204,
+      "checks": {
+        "checkpoint_file_exists": true,
+        "checkpoint_metadata": true,
+        "checkpoint_safe_load": true,
+        "checkpoint_state_hashable": true,
+        "initialization_identity": true,
+        "model_state_identity": true,
+        "pool_identity": true,
+        "pool_matches_split": true,
+        "tune_reconstruction_exact": true
+      },
+      "hashes": {
+        "discovery_model_state_sha256": "1db3e8fc33f81ae17f75e1cdc0d9895a8b3a5d577e3fc0c9b112bcc51ea2673d",
+        "initial_state_sha256": "2c6162e9f549618f5e48b389a6aeb29280887382cc7ad850a03a3574bc959a44",
+        "pool_indices_sha256": "1900a3d06ba70b9c30bc89e6ac14e4d3b158b888fc7376b4ebaf6ee817e2c165",
+        "prior_checkpoint_file_sha256": "8f5ab003b2d858e20bf32eff637e82810b59443b28bb7f8f34c5af36619129fb",
+        "prior_model_state_sha256": "1db3e8fc33f81ae17f75e1cdc0d9895a8b3a5d577e3fc0c9b112bcc51ea2673d",
+        "tune_reconstruction_sha256": "5be11451560b196e8dd0dd610961b10d2d2e2354e099f7a337054d1a367332b4"
+      },
+      "init_seed": 1730,
+      "pool_size": 1048576,
+      "replay_verified": true,
+      "tune_reconstruction": {
+        "mean_predictor_mse": 0.00969446518552356,
+        "reconstruction_cosine": 0.7529508247971535,
+        "reconstruction_mse": 0.004384783639883001,
+        "reconstruction_nmse": 0.4522976312742513,
+        "rows": 65536
+      }
+    },
+    {
+      "anchor_update": 1204,
+      "checks": {
+        "checkpoint_file_exists": true,
+        "checkpoint_metadata": true,
+        "checkpoint_safe_load": true,
+        "checkpoint_state_hashable": true,
+        "initialization_identity": true,
+        "model_state_identity": true,
+        "pool_identity": true,
+        "pool_matches_split": true,
+        "tune_reconstruction_exact": true
+      },
+      "hashes": {
+        "discovery_model_state_sha256": "4c6a1e990d625abc663a96b2af77fdc8cca893201bbdb7870281dd159848125f",
+        "initial_state_sha256": "e6942c44e7c3a39d63c560c52e9abf40b31a842c0ff9c2026fcb4c7b64bf84df",
+        "pool_indices_sha256": "1900a3d06ba70b9c30bc89e6ac14e4d3b158b888fc7376b4ebaf6ee817e2c165",
+        "prior_checkpoint_file_sha256": "257786be643be7eaa3631d0a452a3992f3570eeb9cb029ea81b124ee08aa2100",
+        "prior_model_state_sha256": "4c6a1e990d625abc663a96b2af77fdc8cca893201bbdb7870281dd159848125f",
+        "tune_reconstruction_sha256": "f09d9dc1efad09c28c31f3b55d1c0618eac01a3613ad2d7be82c48ba03666a1e"
+      },
+      "init_seed": 1731,
+      "pool_size": 1048576,
+      "replay_verified": true,
+      "tune_reconstruction": {
+        "mean_predictor_mse": 0.00969446518552356,
+        "reconstruction_cosine": 0.7498101070523262,
+        "reconstruction_mse": 0.004427321914893885,
+        "reconstruction_nmse": 0.4566855241798244,
+        "rows": 65536
+      }
+    }
+  ]
+}

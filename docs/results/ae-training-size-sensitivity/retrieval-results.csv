@@ -1,0 +1,4 @@
+label,init_seed,pool_size,selected_update,query_count,maximum_k,exact_search_invocations,exact_search_seconds,recall_at_10,recall_hits_at_10,recall_denominator_at_10,recall_at_100,recall_hits_at_100,recall_denominator_at_100
+pool-65536,1729,65536,1204,1000,100,1,99.82698947098106,0.0343,343,10000,0.06558,6558,100000
+pool-1048576,1729,1048576,1204,1000,100,1,99.39228430498042,0.0354,354,10000,0.0681,6810,100000
+pool-9863168,1729,9863168,1204,1000,100,1,99.23474292599712,0.0349,349,10000,0.06793,6793,100000

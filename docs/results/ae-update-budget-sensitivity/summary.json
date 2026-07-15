@@ -1,0 +1,227 @@
+{
+  "artifacts": [
+    "aggregate.csv",
+    "paired-degradation.csv",
+    "candidate-decisions.csv",
+    "terminal-slope.csv",
+    "replay-anchor.csv",
+    "update-budget-curves.png",
+    "update-budget-curves.pdf"
+  ],
+  "confirmation": null,
+  "decision_protocol": {
+    "confirmation_rule": "Every metric's one-sided 95% paired-t upper harm bound must be strictly below its frozen margin for every pool.",
+    "discovery_rule": "Earliest positive update whose all-metric point estimates are inside the frozen margins, no seed exceeds twice a margin, and that checkpoint plus the next two evaluated checkpoints all pass.",
+    "frozen_protocol_sha256": "41db717aade5062028efd9a7e3d8d57ca238a1f06c781aaf54b06b87deea89a0",
+    "margins": {
+      "reconstruction_cosine": {
+        "better": "higher",
+        "display_name": "Reconstruction cosine",
+        "group": "reconstruction",
+        "margin": 0.005,
+        "margin_scale": "absolute",
+        "metric": "reconstruction_cosine"
+      },
+      "reconstruction_nmse": {
+        "better": "lower",
+        "display_name": "Reconstruction NMSE",
+        "group": "reconstruction",
+        "margin": 0.01,
+        "margin_scale": "relative",
+        "metric": "reconstruction_nmse"
+      },
+      "sample_conditional_continuity": {
+        "better": "higher",
+        "display_name": "Continuity",
+        "group": "geometry",
+        "margin": 0.002,
+        "margin_scale": "absolute",
+        "metric": "sample_conditional_continuity"
+      },
+      "sample_conditional_neighbor_overlap": {
+        "better": "higher",
+        "display_name": "Neighbor overlap at 16",
+        "group": "geometry",
+        "margin": 0.005,
+        "margin_scale": "absolute",
+        "metric": "sample_conditional_neighbor_overlap"
+      },
+      "sample_conditional_trustworthiness": {
+        "better": "higher",
+        "display_name": "Trustworthiness",
+        "group": "geometry",
+        "margin": 0.002,
+        "margin_scale": "absolute",
+        "metric": "sample_conditional_trustworthiness"
+      },
+      "sampled_local_decodability_nmse": {
+        "better": "lower",
+        "display_name": "Local-decoder NMSE",
+        "group": "geometry",
+        "margin": 0.01,
+        "margin_scale": "relative",
+        "metric": "sampled_local_decodability_nmse"
+      },
+      "sampled_pair_distance_spearman": {
+        "better": "higher",
+        "display_name": "Pair-distance Spearman",
+        "group": "geometry",
+        "margin": 0.01,
+        "margin_scale": "absolute",
+        "metric": "sampled_pair_distance_spearman"
+      },
+      "sampled_pair_normalized_stress": {
+        "better": "lower",
+        "display_name": "Normalized stress",
+        "group": "geometry",
+        "margin": 0.005,
+        "margin_scale": "absolute",
+        "metric": "sampled_pair_normalized_stress"
+      }
+    },
+    "multiplicity": "The all-metric declaration is an intersection-union gate; every component must pass, so no additional multiplicity correction is applied.",
+    "positive_signed_degradation_means_worse": true,
+    "strict_protocol_validation": true
+  },
+  "discovery": {
+    "candidate_compute_by_pool": {
+      "1048576": null,
+      "65536": null
+    },
+    "candidate_update_by_pool": {
+      "1048576": null,
+      "65536": null
+    },
+    "checkpoint_updates": [
+      0,
+      8,
+      16,
+      32,
+      64,
+      96,
+      128,
+      192,
+      256,
+      384,
+      512,
+      768,
+      1024,
+      1204,
+      1808,
+      2408,
+      3612,
+      4816,
+      7224,
+      9632
+    ],
+    "earliest_common_sustained_candidate_update": null,
+    "fine_grid": {
+      "all_pools_complete": false,
+      "by_pool": {
+        "1048576": {
+          "complete": false,
+          "fine_step_updates": null,
+          "lower_failing_update": null,
+          "missing_updates": [],
+          "reason": "no sustained coarse pass",
+          "upper_sustained_update": null
+        },
+        "65536": {
+          "complete": false,
+          "fine_step_updates": null,
+          "lower_failing_update": null,
+          "missing_updates": [],
+          "reason": "no sustained coarse pass",
+          "upper_sustained_update": null
+        }
+      }
+    },
+    "long_reference_update": 9632,
+    "pool_sizes": [
+      65536,
+      1048576
+    ],
+    "recommendation_scope": "earliest common sustained-pass checkpoint on the tested grid",
+    "replay_anchor_update": 1204,
+    "replay_audit": {
+      "all_entries_report_anchor_present": true,
+      "anchor_update": 1204,
+      "current_run_identity_exposed": true,
+      "entry_count": 6,
+      "external_prior_result_checked": false
+    },
+    "seeds": [
+      1729,
+      1730,
+      1731
+    ]
+  },
+  "external_replay_verification": {
+    "all_required_identities_match": true,
+    "external_prior_result_checked": true,
+    "file_sha256": "ac88e99a5ff9adae61c83eb44bde7e27c1dfba82c49a3456b9fd0e89eb99f959",
+    "provided": true,
+    "reason": null,
+    "verified": true
+  },
+  "generated_at_utc": "2026-07-14T21:14:12.014232+00:00",
+  "inputs": {
+    "confirmation": null,
+    "discovery": {
+      "design_identity_sha256": "48b02c73f8c50e8138e20e4c490df715865815dc6804731cc3344a669393b72c",
+      "file_sha256": "0f70a82d048c1c3c2392bff8257c7a5678b465135041ad45a2c36bfd4a3c235b",
+      "protocol": "deep1b-ae-update-budget-sensitivity-v1"
+    }
+  },
+  "limitations": [
+    "The practical margins are frozen engineering tolerances, not universal constants.",
+    "The long-budget checkpoint is a tested reference, not a proven global optimum.",
+    "Terminal changes are descriptive and never trigger an automatic plateau claim.",
+    "replay-anchor.csv compares update 1204 with the long reference; only the separate external replay-verification input can establish agreement with the prior run.",
+    "Seeds, rather than geometry rows or sampled pairs, are the replicate units."
+  ],
+  "protocol": "deep1b-ae-update-budget-public-analysis-v1",
+  "recommendation_gate": {
+    "all_prerequisites_pass": false,
+    "prerequisites": {
+      "external_prior_replay_verified": true,
+      "fine_grid_complete": false,
+      "fresh_seed_confirmation_pass": false,
+      "frozen_protocol_sha256_verified": true,
+      "terminal_flatness_pass": false
+    },
+    "recommended_update": null,
+    "suppressed_reason": "No recommendation is issued until every frozen prerequisite passes."
+  },
+  "schema_version": 1,
+  "status": "ok",
+  "terminal_slope": {
+    "all_pools_terminal_flatness_pass": false,
+    "complete_by_pool": {
+      "1048576": true,
+      "65536": true
+    },
+    "extended_terminal_still_not_flat": true,
+    "extension_required": false,
+    "interpretation": "Frozen terminal-flatness diagnostic: reconstruction NMSE and local-decoder NMSE use relative changes; all other metrics use absolute changes. Passing supports the protocol's bounded terminal-flatness statement, not a universal plateau.",
+    "plateau_claimed": false,
+    "reported_post_anchor_slope_updates": [
+      1204,
+      1808,
+      2408,
+      3612,
+      4816,
+      7224,
+      9632
+    ],
+    "requested_updates": [
+      4816,
+      7224,
+      9632
+    ],
+    "terminal_flatness_pass_by_pool": {
+      "1048576": false,
+      "65536": false
+    }
+  }
+}

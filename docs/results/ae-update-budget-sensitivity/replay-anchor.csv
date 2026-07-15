@@ -1,0 +1,17 @@
+phase,pool_size,replay_anchor_update,long_reference_update,metric,comparison_scale,n,mean_signed_degradation,sample_sd,positive_means_anchor_is_worse
+discovery,65536,1204,9632,reconstruction_nmse,relative,3,0.12291509647708503,0.0021827271324929448,True
+discovery,65536,1204,9632,reconstruction_cosine,absolute,3,0.03337471932172775,0.0006758602328500702,True
+discovery,65536,1204,9632,sample_conditional_trustworthiness,absolute,3,0.012382713630120853,0.000750008575777049,True
+discovery,65536,1204,9632,sample_conditional_continuity,absolute,3,0.001757215355240686,0.0007751061628523667,True
+discovery,65536,1204,9632,sample_conditional_neighbor_overlap,absolute,3,0.05228750000000001,0.00562266618251517,True
+discovery,65536,1204,9632,sampled_pair_distance_spearman,absolute,3,0.02113945582918242,0.01802467421139492,True
+discovery,65536,1204,9632,sampled_pair_normalized_stress,absolute,3,0.0202858966339655,0.007082151754960652,True
+discovery,65536,1204,9632,sampled_local_decodability_nmse,relative,3,0.05222263487044376,0.001530619549599622,True
+discovery,1048576,1204,9632,reconstruction_nmse,relative,3,0.14875852336318118,0.00252662075132571,True
+discovery,1048576,1204,9632,reconstruction_cosine,absolute,3,0.038604808350404106,0.0007488349094336115,True
+discovery,1048576,1204,9632,sample_conditional_trustworthiness,absolute,3,0.014240222925669102,0.0007535497869035919,True
+discovery,1048576,1204,9632,sample_conditional_continuity,absolute,3,0.0025681346933306517,0.0002529470910736473,True
+discovery,1048576,1204,9632,sample_conditional_neighbor_overlap,absolute,3,0.05851666666666668,0.005367164831951181,True
+discovery,1048576,1204,9632,sampled_pair_distance_spearman,absolute,3,0.027158273791173415,0.006237374356659458,True
+discovery,1048576,1204,9632,sampled_pair_normalized_stress,absolute,3,0.02172013280128911,0.0025235392325497247,True
+discovery,1048576,1204,9632,sampled_local_decodability_nmse,relative,3,0.05698959837842691,0.0036985547725653695,True
