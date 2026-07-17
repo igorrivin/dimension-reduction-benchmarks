@@ -1,0 +1,10 @@
+# Install this constraint set in a separate CPython 3.12 environment.  The
+# CELLxGENE Census 1.17 line supports Python 3.10--3.12, whereas the RAPIDS
+# 26.06 benchmark environment in this repository uses Python 3.14.
+cellxgene-census==1.17.0
+scanpy[skmisc]==1.12.2
+scikit-misc==0.5.2
+
+# These are top-level reproducibility constraints, not a complete lock file.
+# Before each run, save the resolver output (including TileDB-SOMA, AnnData,
+# NumPy, pandas, SciPy, and PyArrow) in the run log.

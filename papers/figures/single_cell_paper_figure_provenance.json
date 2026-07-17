@@ -1,0 +1,675 @@
+{
+  "created_at": "2026-07-16T16:55:13.435509+00:00",
+  "dire_knn_degree_audit_figure": {
+    "change_orientation": "positive values indicate improvement under 64/128 degrees",
+    "exact_reference_query_rows": 5000,
+    "final_neighbors": 30,
+    "graph_builds_per_configuration": 3,
+    "interpretation_guard": "64/128 uses UMAP-like degree settings inside DiRe's cuVS all-neighbors path; it is not an extracted UMAP graph",
+    "paired_changes": {
+      "2": {
+        "$\\rho_S$": {
+          "mean": 0.000796032007800429,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.0013732888676635394,
+          "values": [
+            -0.0006256614332535992,
+            0.0008985916794791438,
+            0.0021151657771757426
+          ]
+        },
+        "Balanced accuracy": {
+          "mean": -0.001995176213668385,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.008827527004709429,
+          "values": [
+            0.0008560198621750392,
+            -0.011895928747037099,
+            0.005054380243856904
+          ]
+        },
+        "Cell-type ASW": {
+          "mean": 0.0013048251469930012,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.0006380927309227969,
+          "values": [
+            0.001949995756149292,
+            0.0012904256582260132,
+            0.0006740540266036987
+          ]
+        },
+        "Continuity": {
+          "mean": 4.979401442014216e-05,
+          "orientation": "positive is improvement",
+          "sample_sd": 7.26050593053465e-05,
+          "values": [
+            0.00010619302317760315,
+            7.531469707677818e-05,
+            -3.2125676993954855e-05
+          ]
+        },
+        "Macro-F1": {
+          "mean": -0.001190989446897106,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.008343059063536743,
+          "values": [
+            0.00038942421577142783,
+            -0.01021122386195189,
+            0.006248831305489144
+          ]
+        },
+        "Overlap": {
+          "mean": 0.000993333333333309,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.0007960736984308979,
+          "values": [
+            0.0008799999999999364,
+            0.00025999999999992696,
+            0.0018400000000000638
+          ]
+        },
+        "Stress": {
+          "mean": 0.0002889793285369979,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.00048069216604308614,
+          "values": [
+            -0.00021023482363591306,
+            0.0003284581552187027,
+            0.0007487146540282041
+          ]
+        },
+        "Trust": {
+          "mean": 0.00031267870959054517,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.0004438878588076792,
+          "values": [
+            -0.00016988865341271975,
+            0.0004043529451339678,
+            0.0007035718370503874
+          ]
+        }
+      },
+      "8": {
+        "$\\rho_S$": {
+          "mean": 0.0007809238773641333,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.000428517120958766,
+          "values": [
+            0.0006238733605386515,
+            0.0004530893514373968,
+            0.0012658089201163514
+          ]
+        },
+        "Balanced accuracy": {
+          "mean": -0.0006702219244864768,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.00024521312814044756,
+          "values": [
+            -0.0007391415571508797,
+            -0.00039792384086434485,
+            -0.0008736003754442057
+          ]
+        },
+        "Cell-type ASW": {
+          "mean": 2.759695053100586e-05,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.0006093447663676206,
+          "values": [
+            -0.0004909783601760864,
+            0.0006987228989601135,
+            -0.00012495368719100952
+          ]
+        },
+        "Continuity": {
+          "mean": 2.45164328727121e-06,
+          "orientation": "positive is improvement",
+          "sample_sd": 2.5267324351010264e-05,
+          "values": [
+            1.5498368486577263e-05,
+            -2.667204897899289e-05,
+            1.8528610354229258e-05
+          ]
+        },
+        "Macro-F1": {
+          "mean": -0.0008476262970043743,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.000493879492259354,
+          "values": [
+            -0.000572686025575031,
+            -0.0005524038880246329,
+            -0.0014177889774134589
+          ]
+        },
+        "Overlap": {
+          "mean": -0.00015555555555561243,
+          "orientation": "positive is improvement",
+          "sample_sd": 0.0001835856849094527,
+          "values": [
+            -3.3333333333440684e-05,
+            -0.0003666666666666263,
+            -6.666666666677035e-05
+          ]
+        },
+        "Stress": {
+          "mean": 0.0001428813020269056,
+          "orientation": "positive is improvement",
+          "sample_sd": 6.904106271649068e-05,
+          "values": [
+            0.00011314530784695132,
+            9.36907608208859e-05,
+            0.00022180783741287957
+          ]
+        },
+        "Trust": {
+          "mean": 2.964443098862901e-05,
+          "orientation": "positive is improvement",
+          "sample_sd": 8.779465961432392e-05,
+          "values": [
+            -6.737847747839698e-05,
+            5.2703602785308945e-05,
+            0.00010360816765897507
+          ]
+        }
+      }
+    },
+    "point_encoding": "small translucent points are seeds 0, 1, and 2; diamonds are means",
+    "recall": {
+      "minimum": {
+        "graph_degree": 31,
+        "graph_seconds_mean": 0.2552249396685511,
+        "graph_seconds_sample_sd": 0.007023882038734368,
+        "graph_seconds_values": [
+          0.26292422198457643,
+          0.2491671980242245,
+          0.25358339899685234
+        ],
+        "intermediate_graph_degree": 62,
+        "label": "31/62",
+        "recall": {
+          "1": {
+            "exact_row_fraction_mean": 0.9846,
+            "exact_row_fraction_sample_sd": 0.0,
+            "exact_row_fraction_values": [
+              0.9846,
+              0.9846,
+              0.9846
+            ],
+            "mean": 0.9846,
+            "miss_percent_values": [
+              1.539999999999997,
+              1.539999999999997,
+              1.539999999999997
+            ],
+            "sample_sd": 0.0,
+            "values": [
+              0.9846,
+              0.9846,
+              0.9846
+            ]
+          },
+          "10": {
+            "exact_row_fraction_mean": 0.9356,
+            "exact_row_fraction_sample_sd": 0.0,
+            "exact_row_fraction_values": [
+              0.9356,
+              0.9356,
+              0.9356
+            ],
+            "mean": 0.9933200000000001,
+            "miss_percent_values": [
+              0.6679999999999908,
+              0.6679999999999908,
+              0.6679999999999908
+            ],
+            "sample_sd": 0.0,
+            "values": [
+              0.9933200000000001,
+              0.9933200000000001,
+              0.9933200000000001
+            ]
+          },
+          "30": {
+            "exact_row_fraction_mean": 0.8824666666666667,
+            "exact_row_fraction_sample_sd": 0.0019425069712444786,
+            "exact_row_fraction_values": [
+              0.8808,
+              0.882,
+              0.8846
+            ],
+            "mean": 0.9958511111111111,
+            "miss_percent_values": [
+              0.4213333333333291,
+              0.41600000000000525,
+              0.4073333333333373
+            ],
+            "sample_sd": 7.065828042478424e-05,
+            "values": [
+              0.9957866666666667,
+              0.99584,
+              0.9959266666666666
+            ]
+          }
+        }
+      },
+      "umap-matched": {
+        "graph_degree": 64,
+        "graph_seconds_mean": 0.2635403776851793,
+        "graph_seconds_sample_sd": 0.0017509044888206265,
+        "graph_seconds_values": [
+          0.26451150100911036,
+          0.2615191219956614,
+          0.26459051005076617
+        ],
+        "intermediate_graph_degree": 128,
+        "label": "64/128",
+        "recall": {
+          "1": {
+            "exact_row_fraction_mean": 0.9845333333333334,
+            "exact_row_fraction_sample_sd": 0.00011547005383791244,
+            "exact_row_fraction_values": [
+              0.9846,
+              0.9844,
+              0.9846
+            ],
+            "mean": 0.9845333333333334,
+            "miss_percent_values": [
+              1.539999999999997,
+              1.5599999999999947,
+              1.539999999999997
+            ],
+            "sample_sd": 0.00011547005383791244,
+            "values": [
+              0.9846,
+              0.9844,
+              0.9846
+            ]
+          },
+          "10": {
+            "exact_row_fraction_mean": 0.9355333333333333,
+            "exact_row_fraction_sample_sd": 0.00011547005383791244,
+            "exact_row_fraction_values": [
+              0.9356,
+              0.9354,
+              0.9356
+            ],
+            "mean": 0.9933133333333334,
+            "miss_percent_values": [
+              0.6679999999999908,
+              0.6700000000000039,
+              0.6679999999999908
+            ],
+            "sample_sd": 1.1547005383868162e-05,
+            "values": [
+              0.9933200000000001,
+              0.9933,
+              0.9933200000000001
+            ]
+          },
+          "30": {
+            "exact_row_fraction_mean": 0.8868666666666667,
+            "exact_row_fraction_sample_sd": 0.0015143755588800333,
+            "exact_row_fraction_values": [
+              0.8858,
+              0.8886,
+              0.8862
+            ],
+            "mean": 0.9960066666666667,
+            "miss_percent_values": [
+              0.40199999999999125,
+              0.3946666666666543,
+              0.4013333333333313
+            ],
+            "sample_sd": 4.055175020202565e-05,
+            "values": [
+              0.9959800000000001,
+              0.9960533333333335,
+              0.9959866666666667
+            ]
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "dire_knn_degree_audit": [
+      {
+        "path": "papers/figures/dire_knn_degree_audit.pdf",
+        "sha256": "5a2b45057dac5dc896b71341666a558481fdd5b0012646bd7ee5ede1f859f46a"
+      },
+      {
+        "path": "papers/figures/dire_knn_degree_audit.png",
+        "sha256": "bd7442a624f8be7c33db3ce8c45c3388b1a845d1e3fead5ada58834351cb3768"
+      }
+    ],
+    "tabula_sapiens_layouts": [
+      {
+        "path": "papers/figures/tabula_sapiens_cell_type_layouts.pdf",
+        "sha256": "d7cb0192a7ba6ce7e806711ead733d51f3b2fa7cdb72749dca4a82d735c151b2"
+      },
+      {
+        "path": "papers/figures/tabula_sapiens_cell_type_layouts.png",
+        "sha256": "5c958182ffe795184d5c7024dbeffe95071102917538e41a926c9a5c10d4699f"
+      }
+    ]
+  },
+  "schema_version": 1,
+  "script": {
+    "path": "experiments/plot_single_cell_paper_figures.py",
+    "sha256": "4be5e72201507f69f895e7cdf32ba58e52d19ac3b50b44cccab020177bfdaff3"
+  },
+  "sources": {
+    "artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/results.json": "96ec9478fc6a381cbd9e3596f45fe3a497c4fb8ff41db2253cda5ec831594d80",
+    "artifacts/single-cell/tabula-pilot-100k/dire-knn-degree-audit/results.json": "dcedc3cb432829638a9c7dcb3996794921dc2d2a7b5bc375f6ee9a489bf97b9b",
+    "artifacts/single-cell/tabula-pilot-100k/manifest.json": "f9b175577552dc0226b7708debce9c60244c05e40b7b701cff7ca862896398a3",
+    "artifacts/single-cell/tabula-pilot-100k/metadata.parquet": "83393a39b78ccf3e005825ec7fcacdb91925659f123492d98f07fe843aa55783"
+  },
+  "tabula_sapiens_layout_figure": {
+    "background_rows": 49101,
+    "cell_type_count": 180,
+    "displayed_cell_types": [
+      {
+        "cell_type": "B cell",
+        "color": "#0072B2",
+        "count": 10075,
+        "legend_label": "B cell"
+      },
+      {
+        "cell_type": "CD4-positive, alpha-beta T cell",
+        "color": "#E69F00",
+        "count": 8544,
+        "legend_label": "CD4 T cell"
+      },
+      {
+        "cell_type": "fibroblast",
+        "color": "#009E73",
+        "count": 7333,
+        "legend_label": "fibroblast"
+      },
+      {
+        "cell_type": "CD8-positive, alpha-beta T cell",
+        "color": "#CC79A7",
+        "count": 6711,
+        "legend_label": "CD8 T cell"
+      },
+      {
+        "cell_type": "neutrophil",
+        "color": "#56B4E9",
+        "count": 6119,
+        "legend_label": "neutrophil"
+      },
+      {
+        "cell_type": "macrophage",
+        "color": "#D55E00",
+        "count": 6074,
+        "legend_label": "macrophage"
+      },
+      {
+        "cell_type": "stromal cell of ovary",
+        "color": "#882255",
+        "count": 3080,
+        "legend_label": "ovarian stromal cell"
+      },
+      {
+        "cell_type": "endothelial cell",
+        "color": "#44AA99",
+        "count": 2963,
+        "legend_label": "endothelial cell"
+      }
+    ],
+    "displayed_seed": 0,
+    "interpretation_guard": "d=8 panels are per-layout unsupervised PCA views and are not scored cross-method projections",
+    "layouts": {
+      "autoencoder-d2-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/autoencoder-d2-s0-layout.npy",
+        "sha256": "9cd3e3f435d4b0291b02c8b7a12822e5f9b02a1ac9379c781ea1dd2697fcee4c",
+        "shape": [
+          100000,
+          2
+        ]
+      },
+      "autoencoder-d8-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/autoencoder-d8-s0-layout.npy",
+        "sha256": "bd6b6cca0d70aa758b20888c1fe39a9736befbd0ec75cb1b0cf9faaf824337c6",
+        "shape": [
+          100000,
+          8
+        ]
+      },
+      "dire-d2-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/dire-d2-s0-layout.npy",
+        "sha256": "9287c48a91fab16e4d07d22a3a4f1f68e2886e695841320ee091f92452abfaa2",
+        "shape": [
+          100000,
+          2
+        ]
+      },
+      "dire-d8-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/dire-d8-s0-layout.npy",
+        "sha256": "fcb389637ddb6accbd6b156ede44df67bb7fe364b03b3aa3bf14a26b5e87218d",
+        "shape": [
+          100000,
+          8
+        ]
+      },
+      "pca-d2-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/pca-d2-s0-layout.npy",
+        "sha256": "891623417091c24485dc29630f12d6e1d9c3db30c9d0fb453dd1b2652b5c3208",
+        "shape": [
+          100000,
+          2
+        ]
+      },
+      "pca-d8-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/pca-d8-s0-layout.npy",
+        "sha256": "d8640d22424801d9370e18a58cf481ac5a6179a6c87e33bbf1cd476e5c62f8be",
+        "shape": [
+          100000,
+          8
+        ]
+      },
+      "umap-d2-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/umap-d2-s0-layout.npy",
+        "sha256": "96092ae4045a946ab0e028b30bfab72d512ed6c15b7b86bc18ea5e5f4fdb2bc1",
+        "shape": [
+          100000,
+          2
+        ]
+      },
+      "umap-d8-s0": {
+        "dtype": "float32",
+        "path": "/home/igor/devel/dimension-reduction-benchmarks/artifacts/single-cell/tabula-pilot-100k/benchmark-pca50/umap-d8-s0-layout.npy",
+        "sha256": "c03a9da24cbf234945faf25bfcb1a6603d916fdb81a7cb5132fffa7573b15749",
+        "shape": [
+          100000,
+          8
+        ]
+      }
+    },
+    "panels": {
+      "autoencoder-d2-s0": {
+        "pca_components": null,
+        "pca_explained_variance_ratio": null,
+        "view_center": [
+          1.169344425201416,
+          -2.2129809856414795
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 150.77210906982424
+      },
+      "autoencoder-d8-s0": {
+        "pca_components": [
+          [
+            -0.13885300647387055,
+            -0.20796784831050222,
+            0.4356325999933896,
+            -0.3357938091666216,
+            0.6280654262381191,
+            -0.08572799843235272,
+            -0.4392583430945321,
+            -0.20043106266643068
+          ],
+          [
+            0.48158423171672843,
+            -0.06471939510746239,
+            0.3586557153671032,
+            0.5339165007544954,
+            -0.1375743033107603,
+            0.1017880934588378,
+            -0.506437954342025,
+            0.25381168061331855
+          ]
+        ],
+        "pca_explained_variance_ratio": [
+          0.28664847628091833,
+          0.2412918718349235
+        ],
+        "view_center": [
+          6.342659370588171,
+          3.8829740906922634
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 85.69471496318013
+      },
+      "dire-d2-s0": {
+        "pca_components": null,
+        "pca_explained_variance_ratio": null,
+        "view_center": [
+          -0.1190771609544754,
+          0.03421272709965706
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 2.191311550140381
+      },
+      "dire-d8-s0": {
+        "pca_components": [
+          [
+            -0.2804111244656925,
+            0.00628726909962396,
+            -0.29510384065825873,
+            -0.5326019401187172,
+            -0.638564084436292,
+            -0.10721772339242225,
+            -0.18751358682649338,
+            -0.31009336134094856
+          ],
+          [
+            0.373208497910512,
+            -0.22180403732280174,
+            -0.4663312364476545,
+            0.3974184075325875,
+            0.060460432258351765,
+            -0.462837993559831,
+            -0.221542542413873,
+            -0.411286521942538
+          ]
+        ],
+        "pca_explained_variance_ratio": [
+          0.22833243842296938,
+          0.1926377212010699
+        ],
+        "view_center": [
+          -0.18418827259224918,
+          -0.07998767697758444
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 2.877165341913232
+      },
+      "pca-d2-s0": {
+        "pca_components": null,
+        "pca_explained_variance_ratio": null,
+        "view_center": [
+          -1.454833984375,
+          0.2423516809940338
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 19.97110980987549
+      },
+      "pca-d8-s0": {
+        "pca_components": [
+          [
+            -0.9999999999999571,
+            -8.183395107915107e-08,
+            -1.1616805971064857e-07,
+            2.1431906979993343e-07,
+            1.0762216682217396e-07,
+            5.681073998336066e-08,
+            2.7472842798083952e-08,
+            -6.621560218521598e-08
+          ],
+          [
+            -8.183399839842272e-08,
+            0.9999999999999798,
+            7.043174067917615e-08,
+            -1.173088983290473e-07,
+            -1.1124006454626643e-07,
+            -2.2923766788023896e-08,
+            -5.475646901109826e-08,
+            -1.1820652156732753e-08
+          ]
+        ],
+        "pca_explained_variance_ratio": [
+          0.22917316580337874,
+          0.17844237225152026
+        ],
+        "view_center": [
+          1.454832584305111,
+          0.2423503757288203
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 19.971109735325904
+      },
+      "umap-d2-s0": {
+        "pca_components": null,
+        "pca_explained_variance_ratio": null,
+        "view_center": [
+          0.1300468146800995,
+          1.4872369766235352
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 18.093536529541016
+      },
+      "umap-d8-s0": {
+        "pca_components": [
+          [
+            -0.012833885608320958,
+            -0.31175650185154047,
+            -0.5082472553846682,
+            -0.3669229337167901,
+            -0.513839831983038,
+            -0.33749398923737634,
+            -0.0659138687891629,
+            0.35695554238256383
+          ],
+          [
+            -0.00028985318691005386,
+            -0.19833536719710948,
+            -0.6126518760127683,
+            0.07714131776551002,
+            0.2069939137782067,
+            -0.07662213118193,
+            0.12441166205017853,
+            -0.7177563660694251
+          ]
+        ],
+        "pca_explained_variance_ratio": [
+          0.34300019692084843,
+          0.2057808111228857
+        ],
+        "view_center": [
+          -0.01740356697656078,
+          0.15332639366130485
+        ],
+        "view_quantile": 0.995,
+        "view_radius": 10.036680088803497
+      }
+    },
+    "rows": 100000
+  }
+}

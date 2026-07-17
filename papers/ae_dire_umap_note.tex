@@ -32,7 +32,7 @@
 \title{\textbf{Reconstruction Without Pairwise Distances:}\\
        A Large-Scale Comparison of Autoencoders, DiRe, and UMAP}
 \author{Igor Rivin}
-\date{14 July 2026}
+\date{16 July 2026}
 
 \begin{document}
 \maketitle
@@ -46,6 +46,9 @@ paragraph embeddings.  All reducers receive the same row-normalized data and are
 evaluated over three seeds using sample-conditional neighborhood fidelity, sampled
 global-distance fidelity, local decodability, label- or group-aware diagnostics, sampled
 persistence-derived diagnostics, and synchronized fit time.
+We add a separate single-cell arm on 100,000 deterministically selected Tabula Sapiens
+cells: PCA, the autoencoder, DiRe, and UMAP reduce the same unnormalized 50-PC prepared
+matrix, and an exact-neighbor audit tests two DiRe NN-descent working-degree settings.
 We separately test one-pass $96\to8$ scaling on exact 10-million- and 100-million-row
 prefixes of Yandex Deep1B, with bounded-memory training, exact reduced-space retrieval,
 and sampled topology diagnostics.  Controlled 10-million-row experiments then separate
@@ -60,7 +63,12 @@ category prediction.  On the
 Wikipedia corpus, width two divides the geometric columns among all three methods, while
 at width eight the autoencoder leads the local, distance-order, and decoding scores but
 not stress; DiRe gives the lowest global-distance stress at both widths and UMAP most
-strongly groups paragraphs from the same article.  A separate controlled check on
+strongly groups paragraphs from the same article.  On Tabula Sapiens, UMAP gives the
+strongest donor-held-out cell-type scores at both widths, while the autoencoder leads
+four of five PCA50-relative geometric scores at width eight.  Increasing DiRe's
+NN-descent working degrees from $31/62$ to $64/128$ raises exact-sample Recall@30 only
+from .99585 to .99601; the absolute change in every plotted downstream mean is below
+.0020.  A separate controlled check on
 manifolds of known dimension
 finds that rounded TwoNN and autoencoder-elbow estimates agree exactly in four of nine
 seeded trials and are within one dimension in all nine, with interpretable differences
@@ -122,10 +130,13 @@ Corpus & Rows & Input $D$ & Target $d$ & Label field & Label interpretation\\
 \midrule
 arXiv & 723,457 & 384 & $2,8$ & primary category & subject category\\
 Wikipedia & 1,000,000 & 1,024 & $2,8$ & article URL & same-article group\\
+Tabula Sapiens & 100,000 & 50 & $2,8$ & cell type & donor-held-out annotation\\
 \bottomrule
 \end{tabular}
-\caption{The two large embedding corpora.  Wikipedia URLs are group identifiers, not a
-topic taxonomy analogous to arXiv categories.}
+\caption{The three fixed-width benchmark inputs.  The first two are row-normalized text
+embeddings; Tabula Sapiens is an unnormalized, non-whitened 50-PC single-cell
+representation.  Wikipedia URLs are group identifiers, not a topic taxonomy analogous
+to arXiv categories or Tabula cell-type annotations.}
 \label{tab:data}
 \end{table}
 
@@ -134,11 +145,23 @@ embeddings \cite{bge}.  The Wikipedia matrix is the first million rows of the En
 configuration of \texttt{CohereLabs/wikipedia-2023-11-embed-multilingual-v3}
 \cite{coherewiki}.
 
-Every input row is converted to float32 and normalized to unit Euclidean norm.  Each
-method receives the complete normalized matrix at both $d=2$ and $d=8$, with
-reducer/training seeds 0, 1, and 2.  Evaluation samples and sampled pairs are held fixed
-across methods, target widths, and seeds.  DiRe and UMAP fitting, and all
-neighborhood-based evaluations, use $k=16$; autoencoder fitting has no neighborhood
+The single-cell arm uses the ``Tabula Sapiens---All Cells'' dataset from CELLxGENE
+Census release 2025-11-08 \cite{tabulasapiens,cellxgenecensus}.  Exactly 100,000 cells
+are selected by deterministic donor-by-cell-type stratified sampling from 1,136,218
+eligible primary cells.  Genes detected in fewer than three selected cells are removed.
+On raw counts, 2,000 Seurat-v3 highly variable genes are selected with
+donor-by-assay batches; counts are normalized to 10,000 per cell, transformed by
+\texttt{log1p}, centered, scaled to unit variance, clipped at ten, and reduced to 50
+non-whitened principal components.  No additional cell filter or row normalization is
+applied.
+
+Every text-embedding row is converted to float32 and normalized to unit Euclidean norm.
+Every single-cell reducer instead receives the same prepared float32 PCA50 values
+verbatim and in the same row order.  All methods receive the complete corresponding
+matrix at both $d=2$ and $d=8$, with reducer/training seeds 0, 1, and 2.  Evaluation
+samples and sampled pairs are held fixed across methods, target widths, and seeds.
+DiRe and UMAP fitting, and neighborhood-based evaluation, use $k=16$ for the text
+corpora and $k=30$ for Tabula Sapiens; autoencoder fitting has no neighborhood
 parameter.  The comparisons are transductive: every reported layout is fitted on the
 full corpus being evaluated.
 
@@ -161,11 +184,17 @@ for arXiv and
 \[
 1024\!\to\!512\!\to\!256\!\to\!64\!\to\!d\!\to\!64\!\to\!256\!\to\!512\!\to\!1024
 \]
-for Wikipedia.  As $d$ changes from two to eight, their parameter counts range from
+for Wikipedia, and
+\[
+50\!\to\!256\!\to\!128\!\to\!32\!\to\!d\!\to\!32\!\to\!128\!\to\!256\!\to\!50
+\]
+for Tabula Sapiens.  As $d$ changes from two to eight, the text models' parameter counts range from
 271,682 to 272,072 and from 1,346,434 to 1,347,208, respectively.
 AdamW uses learning rate $10^{-3}$ and weight decay $10^{-5}$, with batches of 32,768
-rows.  The primary comparison uses float32 arithmetic; a separate BF16 sensitivity arm
-is reported below.
+text rows and 4,096 single-cell rows.  The text-corpus primary comparison uses float32
+arithmetic; the Tabula autoencoder uses BF16 autocast for training and float32 for
+validation, encoding, and reconstruction evaluation.  A separate paired BF16
+sensitivity arm for the text models is reported below.
 
 Five percent of the rows select an epoch count under a 200-epoch cap and patience 15.
 A freshly initialized model is then refit on all rows for the selected number of epochs.
@@ -173,11 +202,16 @@ The autoencoder is neither pretrained nor recycled between corpora, target width
 seeds.
 
 \paragraph{DiRe and UMAP.}
-DiRe 0.3.1 uses its cuVS implementation, with PCA initialization, 128 layout
-iterations, and an automatically selected approximate-neighbor index.  cuML UMAP 26.06
-uses Euclidean distance, spectral initialization, \texttt{min\_dist}$=0.1$, and
-\texttt{spread}$=1$.  Native UMAP inverse transformation is disabled because its CPU
-Delaunay stage is not a scale-safe operation for these corpora.
+The original text-corpus runs use DiRe 0.3.1's cuVS implementation, with PCA
+initialization, 128 layout iterations, and an automatically selected approximate-neighbor
+index.  The Tabula arm uses the API-compatible local DiRe 0.3.2 development
+implementation; under its automatic RAPIDS 26.06 path, cuVS all-neighbors NN-descent
+constructs the graph with PCA initialization and the same 128 layout iterations.  Exact
+development identifiers remain in the machine-readable experiment record rather than
+the public narrative.  cuML UMAP 26.06 uses Euclidean distance, spectral initialization,
+\texttt{min\_dist}$=0.1$, \texttt{spread}$=1$, and NN-descent graph construction.
+Native UMAP inverse transformation is disabled because its CPU Delaunay stage is not a
+scale-safe operation for these corpora.
 
 \paragraph{Hardware and timing.}
 Reducer runs use a single NVIDIA GH200, RAPIDS/cuML 26.06, PyTorch 2.11, and three
@@ -190,6 +224,16 @@ reconstruction statistics.  Source loading, row normalization, library import, d
 comparison metrics, and the final layout-file flush are outside ``fit.''  One-time data
 preparation took 2.58 seconds for arXiv and 10.05--14.59 seconds across the two Wikipedia
 runs; it may be reused across target widths.
+
+\paragraph{Single-cell graph audit.}
+At fixed final $k=30$, DiRe's default all-neighbors configuration uses NN-descent
+working graph degree 31 and intermediate degree 62.  We compare it with the
+UMAP-like degrees 64 and 128 while holding 20 NN-descent iterations, termination
+threshold $10^{-4}$, input, layout settings, and seeds fixed.  Each configuration has
+three independent graph builds.  Exact cuVS brute-force search queries the same 5,000
+deterministic cells against all 100,000 input rows, and each saved approximate graph is
+then reused for paired $d=2$ and $d=8$ DiRe layouts.  The second configuration matches
+working degrees inside DiRe's cuVS path; it does not extract or reuse UMAP's graph.
 
 \paragraph{Deep1B scaling pilot.}
 The separate scaling experiment uses exact leading 10-million- and 100-million-row
@@ -260,13 +304,16 @@ runs may benefit from uncontrolled page-cache state.
 
 \section{Evaluation metrics}
 
-Let $X=\{x_i\}\subset\R^D$ be the normalized input and
+Let $X=\{x_i\}\subset\R^D$ be the prepared input---row-normalized for the text
+corpora and unmodified PCA50 for Tabula Sapiens---and
 $Y=\{y_i\}\subset\R^d$ a layout.  Neighborhood metrics use Euclidean distance and
-$k=16$.  Their $O(n_s^2)$ rank calculations are performed within a declared fixed sample,
-not the complete corpus: a label-stratified 5,000-paper sample for arXiv and a uniform
-3,000-paragraph sample for Wikipedia.  Wikipedia has 153,264 URL groups, more than the
-number of sample slots, so label stratification is not possible.  Identical sample indices
-are used for all methods, target widths, and reducer seeds.
+$k=16$ for the text corpora or $k=30$ for Tabula.  Their $O(n_s^2)$ rank calculations
+are performed within a declared fixed sample, not the complete corpus: a
+label-stratified 5,000-paper sample for arXiv, a uniform 3,000-paragraph sample for
+Wikipedia, and a uniform deterministic 5,000-cell sample for Tabula.  Wikipedia has
+153,264 URL groups, more than the number of sample slots, so label stratification is not
+possible.  Identical sample indices are used for all methods, target widths, and reducer
+seeds.
 
 \subsection{Neighborhood fidelity}
 
@@ -297,6 +344,20 @@ O(k)=\frac{1}{n_s k}\sum_{i=1}^{n_s}
 \end{equation}
 Unlike trustworthiness and continuity, overlap gives no partial credit when a missed or
 introduced neighbor has nearly the correct rank.
+
+\subsection{Approximate graph recall}
+
+For the single-cell audit, let $E_i^k$ be the exact first $k$ input-space neighbors of
+query cell $i$ and $A_i^k$ the corresponding approximate graph neighbors.  On the fixed
+query set $Q$ of 5,000 cells, we report
+\[
+ R_{\mathrm{graph}}(k)=\frac{1}{|Q|k}\sum_{i\in Q}|E_i^k\cap A_i^k|,
+ \qquad
+ F_{\mathrm{exact}}(k)=\frac{1}{|Q|}\sum_{i\in Q}
+ \ind[E_i^k=A_i^k\ \text{as sets}],
+\]
+for $k\in\{1,10,30\}$.  The exact search covers the complete 100,000-row prepared input;
+the approximation is evaluated only on the declared 5\% query sample.
 
 \subsection{Sampled global distances}
 
@@ -336,7 +397,7 @@ test folds $A$ and $B$,
 This shared transductive probe compares all reducers.  It is neither the autoencoder's
 native decoder error nor an out-of-corpus generalization test.
 
-\subsection{Labels and article groups}
+\subsection{Labels, article groups, and cell types}
 
 For arXiv, categories occurring at least five times in the fixed metric sample are kept,
 leaving 4,857 rows and 71 categories.  A fixed stratified 80/20 split trains a
@@ -357,6 +418,22 @@ excluded, leaving an eligible set $E$ of 2,895 anchors.  We report
 \end{align}
 The last quantity is explicitly a \emph{truncated} recall: it can reach one for a large
 article after retrieving 16 mates, even if additional same-article paragraphs remain.
+
+For Tabula Sapiens, a fixed donor-by-cell-type-stratified 20,000-cell sample supplies a
+distance-weighted 30-neighbor classifier.  Leave-one-donor-out folds prevent a donor's
+cells from appearing in both the probe's training and test partitions.  Cell types must
+occur at least 20 times across at least three donors; the completed sample evaluates 118
+types across 24 donor folds.  We report macro-F1 and balanced accuracy.  A separate
+5,000-cell donor-by-type-stratified sample reports ordinary Euclidean average silhouette
+width (ASW) over 143 cross-donor cell types; higher values indicate tighter
+within-type separation.  These are post hoc probes of a transductively fitted layout,
+not tests of reducer generalization to unseen donors.
+
+Technical-covariate leakage uses a separate 20,000-cell sample and, within each eligible
+cell type, leave-one-donor-out 30-neighbor regression for total counts, detected-gene
+count, and mitochondrial fraction.  The baseline is the same-cell-type mean over
+training donors.  We report $R^2=1-\mathrm{NMSE}$, so higher predictability means more
+technical information remains accessible in the layout, not better biological quality.
 
 \subsection{Deep1B strict-ID retrieval}
 
@@ -390,9 +467,10 @@ Writing $\hat x_i=g_\phi(f_\theta(x_i))$, mean reconstruction cosine is
  =\frac1N\sum_{i=1}^N
    \frac{\hat x_i^\top x_i}{\max(\|\hat x_i\|_2,10^{-12})}.
 \]
-The usual factor $\|x_i\|_2$ is one because all benchmark rows are nonzero and normalized.
-These are autoencoder-only diagnostics; Equation~\eqref{eq:decode} is the cross-method
-comparison.
+For the row-normalized text corpora, the usual factor $\|x_i\|_2$ in reconstruction
+cosine is one.  Reconstruction cosine is not reported for the intentionally unnormalized
+Tabula input, while NMSE remains defined.  These are autoencoder-only diagnostics;
+Equation~\eqref{eq:decode} is the text-corpus cross-method comparison.
 
 \subsection{Controlled intrinsic-dimension cross-check}
 
@@ -656,6 +734,130 @@ These are native-layout metrics, not scores of the PCA views in
 Figure~\ref{fig:wikipedia-layouts}.  Labels are evaluation-only and are not supplied to
 any reducer.}
 \label{fig:label-metrics}
+\end{figure}
+\FloatBarrier
+
+\subsection{Tabula Sapiens:
+\texorpdfstring{$100{,}000\times50\to\{2,8\}$}{100,000 x 50 to 2-D and 8-D}}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.0pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rlrrrrrrrrr}
+\toprule
+$d$ & Method & Fit (s)$\downarrow$ & Trust$\uparrow$ & Cont.$\uparrow$
+& Overlap$\uparrow$ & $\rho_S\uparrow$ & Stress$\downarrow$
+& Macro-F1$\uparrow$ & Bal. acc.$\uparrow$ & ASW$\uparrow$\\
+\midrule
+2 & PCA & \textbf{.12} & .767 & .921 & .110 & .441 & .441 & .052 & .057 & -.393\\
+2 & Autoencoder & 27.05 & .952 & .969 & .388 & \textbf{.723} & .448 & .233 & .244 & -.330\\
+2 & DiRe & 3.66 & .935 & .957 & .451 & .259 & .470 & .285 & .291 & -.181\\
+2 & UMAP & .94 & \textbf{.964} & \textbf{.972} & \textbf{.491} & .370
+& \textbf{.434} & \textbf{.331} & \textbf{.335} & \textbf{-.127}\\
+\midrule
+8 & PCA & \textbf{.12} & .954 & .985 & .395 & .800 & \textbf{.211} & .180 & .189 & -.144\\
+8 & Autoencoder & 27.79 & \textbf{.988} & \textbf{.985} & \textbf{.565}
+& \textbf{.843} & .255 & .267 & .277 & -.113\\
+8 & DiRe & 3.88 & .972 & .978 & .522 & .415 & .316 & .307 & .317 & -.081\\
+8 & UMAP & 1.36 & .979 & .980 & .553 & .408 & .334
+& \textbf{.349} & \textbf{.353} & \textbf{-.074}\\
+\bottomrule
+\end{tabular}}
+\caption{Tabula Sapiens PCA50 means over three reducer/training seeds.  Geometry is
+relative to the complete prepared PCA50 representation, with neighborhood scores on the
+fixed 5,000-cell sample.  Cell-type classification uses donor-held-out folds; ASW uses
+the separate fixed 5,000-cell stratified sample.  Fit timing is reducer-specific:
+autoencoder fit includes validation selection, fresh full-data refit, encoding, and
+reconstruction, while graph-method fit is synchronized \texttt{fit\_transform}.
+Boldface marks the best observed mean within each width, not significance.}
+\label{tab:tabula}
+\end{table}
+
+At width two, UMAP leads four of the five geometric scores and all three biological
+scores, while the autoencoder gives the highest pair-distance rank correlation.  At
+width eight, the autoencoder leads trustworthiness, continuity, exact overlap, and pair
+correlation; PCA gives the lowest stress, and UMAP remains strongest on every cell-type
+score.  The autoencoder's native reconstruction NMSE falls from .1523 at width two to
+.0541 at width eight.  Thus good reconstruction and PCA50-relative geometry do not imply
+the strongest donor-held-out biological organization.  All ASWs remain negative,
+including UMAP's -.074 at width eight, so none of these layouts yields uniformly compact
+global cell-type clusters.
+
+Detected-gene leakage supplies the opposite diagnostic.  At width two its
+cell-type-conditioned $R^2$ is .279 for DiRe, .292 for UMAP, .400 for the
+autoencoder, and .567 for PCA; at width eight the values are .311, .359, .380, and
+.543, respectively.  Lower is preferable here.  DiRe therefore retains the least
+predictable detected-gene-count signal in this probe even though UMAP retains cell type
+more strongly.  No single score should collapse those two objectives.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{tabula_sapiens_cell_type_layouts.pdf}
+\caption{Seed-0 Tabula Sapiens cell-type organization.  The top row contains native
+$d=2$ layouts; the bottom row is a separate unsupervised PCA view of each native $d=8$
+layout, with the retained two-component variance printed in-panel.  All 100,000 cells
+are displayed.  The eight most frequent of 180 annotated cell types use consistent
+colors, and the other 172 types are gray; labels are never supplied to a reducer.
+Coordinates and isotropic 99.5\% robust limits are panel-specific.  The bottom row is a
+descriptive view, not a cross-method score; Table~\ref{tab:tabula} contains the native
+eight-dimensional metrics.}
+\label{fig:tabula-layouts}
+\end{figure}
+\FloatBarrier
+
+\paragraph{The higher working degree changes graph recall, not the conclusion.}
+Table~\ref{tab:dire-degree} isolates the NN-descent stage.  Moving from DiRe's default
+$31/62$ working degrees to the UMAP-like $64/128$ setting raises mean Recall@30 by
+.000156 (0.0156 percentage points) and the fraction of completely exact 30-neighbor
+rows by .0044.  Recall@1 and Recall@10 do not improve.  Mean graph time rises by 3.3\%,
+from .255 to .264 seconds, as expected from the larger working graph.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Working degrees & Recall@1$\uparrow$ & Recall@10$\uparrow$ & Recall@30$\uparrow$
+& Exact rows@30$\uparrow$ & Graph (s)$\downarrow$\\
+\midrule
+$31/62$ (DiRe default) & .984600 & .993320 & .995851 & .8825 & .255\\
+$64/128$ (UMAP-like) & .984533 & .993313 & .996007 & .8869 & .264\\
+\bottomrule
+\end{tabular}
+\caption{Means over three independent approximate-graph builds at fixed final $k=30$.
+Recall and exact-row fractions use the same 5,000 exact brute-force queries against all
+100,000 cells.  The Recall@30 sample standard deviations are $7.1\times10^{-5}$ and
+$4.1\times10^{-5}$; all three builds satisfy the no-self, no-duplicate, and in-range
+graph contract.}
+\label{tab:dire-degree}
+\end{table}
+
+Reusing each audited graph for paired layouts produces no material quality shift
+(Figure~\ref{fig:dire-degree}).  Across the eight plotted geometry and cell-type metrics,
+the largest absolute change in a three-seed mean is .001995: width-two balanced accuracy
+slightly decreases.  The individual paired label-probe changes are noisier than the
+geometry changes, which is why the figure exposes all three seeds.  With the larger
+degrees, width-two DiRe still has trustworthiness .936, overlap .452, and macro-F1 .283,
+versus UMAP's .964, .491, and .331; the corresponding width-eight values are
+.972/.522/.307 versus .979/.553/.349.  DiRe nevertheless retains better width-eight
+pair correlation and stress than UMAP.  The controlled result therefore points to
+downstream objective/layout differences, not a low-recall DiRe graph, as the main source
+of the remaining local and cell-type gap in this cell.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{dire_knn_degree_audit.pdf}
+\caption{Controlled DiRe NN-descent working-degree audit.  Panel (a) reports missed
+exact neighbors; small translucent points are three independent graph builds and
+diamonds joined by lines are means.  Panels (b)--(c) report paired
+$64/128$-minus-$31/62$ downstream changes after reusing each graph for both target
+widths; stress is sign-reversed so positive always means improvement.  Small points are
+the three seedwise changes and diamonds are means.  The horizontal scale is expanded by
+$10^3$.  ``UMAP-like'' refers only to degree settings inside DiRe's RAPIDS 26.06
+all-neighbors builder; no UMAP graph is extracted.}
+\label{fig:dire-degree}
 \end{figure}
 \FloatBarrier
 
@@ -1101,7 +1303,7 @@ simple pointwise MSE experiment studied here.
 
 \section{Conclusions and limitations}
 
-The reducer results support seven narrow conclusions.
+The reducer results support eight narrow conclusions.
 \begin{enumerate}
   \item A small MSE autoencoder is computationally practical at 723,000--1,000,000 rows
         in this GH200 configuration.  Its favorable timing is consistent with
@@ -1128,6 +1330,12 @@ The reducer results support seven narrow conclusions.
         well without an explicit pairwise objective.  This does not guarantee strong
         label/group organization: UMAP wins arXiv category prediction at both widths and
         Wikipedia same-article retrieval at both widths.
+  \item The Tabula Sapiens pilot extends that separation to donor-held-out biology.
+        UMAP leads all cell-type scores at both widths, while the autoencoder leads four
+        of five PCA50-relative geometry scores at width eight.  DiRe's default graph
+        already has .99585 Recall@30 on the exact-query sample; doubling its working
+        degrees changes no plotted downstream mean by .0020.  In this controlled cell,
+        graph approximation does not explain the remaining UMAP--DiRe quality gap.
   \item On both corpora, increasing $d$ from two to eight changes local-fidelity rankings
         as well as score magnitudes: the autoencoder leads the local, distance-order, and
         decoding columns at width eight but not at width two.  DiRe retains the best
@@ -1165,6 +1373,16 @@ Strict-ID retrieval was evaluated only for the autoencoder and gives no alternat
 distance-tie credit.  Finally, 100 million is the tested storage-limited ceiling, not
 evidence from a billion-row execution.
 
+The single-cell evidence is one 100,000-cell, transductively preprocessed, stratified
+pilot from one versioned Tabula Sapiens dataset.  PCA50 is the only completed input arm;
+the 2,000-HVG sensitivity and full 1.14-million-cell cohort are not reported.  Cell-type
+annotations are not independent experimental ground truth, cells within donors are
+dependent, and donor-held-out probes do not make the reducer itself inductive.  The
+graph audit checks exact neighbors for 5\% of cells, uses three descriptive builds, and
+matches UMAP-like degrees inside DiRe rather than comparing raw DiRe and UMAP graphs.
+It identifies no degree effect under these settings, not equivalence of graph builders
+or layout objectives.
+
 The Deep1B controls are also narrow.  The pool-size study uses one nested training-pool
 draw, one $96\to8$ architecture, one 1,204-update budget, and three initialization
 seeds; it does not test reconstruction-elbow stability.  Long-budget discovery uses only
@@ -1180,7 +1398,8 @@ tuned to matched quality or convergence.
 The public companion \emph{dimension-reduction-benchmarks} repository
 \cite{benchmarkrepo} provides the benchmark,
 topology, controlled-dimension, and Deep1B scaling, training-pool, and optimizer-budget
-implementations together with compact result tables and machine-readable provenance.
+implementations together with the single-cell preparation, fixed-width comparison,
+DiRe graph audit, compact result tables, and machine-readable provenance.
 The controlled-study supplements include public-safe CSV summaries, the frozen
 update-budget protocol, replay verification, and PDF figures.  Raw Deep1B arrays,
 checkpoints, and generated layouts are not included.  The supplementary records identify
@@ -1255,6 +1474,17 @@ D. Baranchuk and A. Babenko,
 ``Benchmarks for billion-scale similarity search,''
 Yandex Research, 26 April 2021,
 \url{https://research.yandex.com/blog/benchmarks-for-billion-scale-similarity-search}.
+
+\bibitem{tabulasapiens}
+The Tabula Sapiens Consortium,
+``The Tabula Sapiens: a multiple-organ, single-cell transcriptomic atlas of humans,''
+\emph{Science} 376 (2022), eabl4896.
+
+\bibitem{cellxgenecensus}
+Chan Zuckerberg Initiative,
+\emph{CELLxGENE Census, data release 2025-11-08},
+\url{https://chanzuckerberg.github.io/cellxgene-census/}
+(accessed July 2026).
 
 \bibitem{benchmarkrepo}
 I. Rivin,

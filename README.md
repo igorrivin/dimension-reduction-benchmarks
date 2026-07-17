@@ -70,6 +70,7 @@ The optional dimension-estimator comparison example uses TwoNN and MLE from
 
 ## Reports and evidence
 
+- [Single-cell RNA-seq benchmark protocol (planned; not yet run)](docs/single-cell-benchmark.rst)
 - [Fixed-dimension comparison](docs/fixed-dimension-comparison.rst)
 - [Large arXiv and Wikipedia comparison](docs/large-embedding-comparison.rst)
 - [Structure-aware AE and prepass pilot](docs/results/structure-aware-ae-prepass-pilot/summary.md)
