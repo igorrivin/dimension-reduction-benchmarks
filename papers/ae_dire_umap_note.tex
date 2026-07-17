@@ -32,7 +32,7 @@
 \title{\textbf{Reconstruction Without Pairwise Distances:}\\
        A Large-Scale Comparison of Autoencoders, DiRe, and UMAP}
 \author{Igor Rivin}
-\date{16 July 2026}
+\date{17 July 2026}
 
 \begin{document}
 \maketitle
@@ -98,26 +98,220 @@ Wikipedia training time, but slightly slows the smaller arXiv network, showing t
 mixed-precision speedup depends on whether dense computation amortizes its overhead.
 \end{abstract}
 
-\section{Why compare pointwise reconstruction with graph methods?}
+\section{Introduction}
 
-For a fixed architecture and epoch budget, an autoencoder's work is linear in the number
-of observations \cite{hinton2006}:
+Dimension reduction is not a single optimization problem.  Given observations
+$X=\{x_i\}_{i=1}^N\subset\R^D$ and a target width $d\ll D$, a reducer must discard
+information, but different objectives specify different information as expendable.
+Coordinate reconstruction rewards recovery of each input vector.  A neighborhood
+objective rewards the survival of selected short-range relationships.  A force layout
+can instead balance graph-edge attraction against broad repulsion.  None of these
+criteria alone implies preservation of global distances, labels, density, or persistent
+homology.
+
+This paper compares one representative of each objective at fixed target widths:
+a reconstruction autoencoder, UMAP, and DiRe.  The comparison is deliberately broader
+than a two-dimensional visualization contest.  We evaluate $d=2$, where severe
+compression exposes clustering and topological behavior, and $d=8$, where a reducer has
+more room to preserve geometry for downstream computation.  Text embeddings,
+single-cell data, and the Deep1B scale pilot then test whether conclusions survive
+changes in ambient dimension, sparsity history, labels, and corpus size.
+
+\subsection{Three algorithms, three fitted objects}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}p{.12\textwidth}p{.27\textwidth}p{.24\textwidth}p{.27\textwidth}@{}}
+\toprule
+Method & Object optimized & Input relationships used during fitting &
+Result of a completed fit\\
+\midrule
+\AEmethod & Encoder and decoder weights under reconstruction MSE &
+Individual vectors without a graph or pairwise loss &
+A parametric map $f_\theta(x)$ and decoder $g_\phi(z)$\\
+UMAP & Low-dimensional coordinates under fuzzy-graph cross-entropy &
+Locally rescaled, weighted $k$-NN graph plus sampled non-edges &
+A transductive layout whose new points require UMAP's separate transform procedure\\
+DiRe & Low-dimensional coordinates under bounded attractive and repulsive forces &
+$k$-NN adjacency plus freshly sampled repulsive partners &
+A transductive force-directed layout in the implementation tested here\\
+\bottomrule
+\end{tabular}
+\caption{Algorithmic contrast.  The table describes the objectives used in this study,
+not every extension available for each method.}
+\label{tab:algorithmic-contrast}
+\end{table}
+
+The table separates two questions that are often conflated.  The first is what
+statistical object is fitted.  The second is how the implementation obtains enough
+relationships to fit it.  UMAP and DiRe store only a sparse $O(Nk)$ graph after neighbor
+construction, but that graph may be built by exact tiled search or by an approximate
+index.  The autoencoder has no graph-building stage.  Its batched training state is
+bounded by the model and optimizer, although materializing or saving all $N$ encoded
+rows still requires $O(Nd)$ output storage.
+
+\subsection{The reconstruction autoencoder}
+
+An autoencoder is the simplest algorithm in this comparison \cite{hinton2006}.  An encoder
+$f_\theta:\R^D\to\R^d$ maps an observation to its bottleneck coordinates, and a decoder
+$g_\phi:\R^d\to\R^D$ maps those coordinates back to input space.  Our model minimizes
+only elementwise reconstruction error,
+\begin{equation}
+  \mathcal{L}_{\mathrm{AE}}(\theta,\phi)
+  =\frac{1}{ND}\sum_{i=1}^{N}
+    \left\|x_i-g_\phi\!\left(f_\theta(x_i)\right)\right\|_2^2.
+  \label{eq:ae-loss}
+\end{equation}
+There is no label, pairwise-distance, neighborhood, contrastive, or topology term.
+The nonlinear hidden layers allow a curved encoding, while the linear bottleneck and
+output leave the latent coordinates and reconstructed values unconstrained in sign.
+
+For a fixed architecture, batch size, and epoch count, the dominant dense work is
 \[
   O\!\left(E N\sum_{\ell}w_{\ell}w_{\ell+1}\right),
 \]
-where $E$ is the number of epochs and $w_\ell$ are layer widths.  It never constructs a
-pairwise distance matrix or a neighborhood graph.  DiRe and UMAP
-\cite{dire,umap}, by contrast, begin from neighbor relationships.  Exact neighbor
-construction would have quadratic scaling, so
-their scalable implementations use approximate-nearest-neighbor indices and then optimize
-a sparse graph.  That avoids $N^2$ storage and work, but introduces indexing, sampling,
-and irregular memory access.  Dense autoencoder matrix multiplications are particularly
-favorable on a large GPU.
+where $E$ is the number of epochs and $w_\ell$ are adjacent layer widths.  The
+dependence on $N$ is linear, and the matrix multiplications map efficiently to GPU tensor
+cores.  This makes bounded-memory streaming natural: batches may be discarded after an
+optimizer update, and the trained encoder subsequently processes new rows without
+rebuilding a graph.  The benefit is conditional.  MSE is coordinate- and scale-sensitive,
+and a model that reconstructs high-variance directions well need not preserve nearest
+neighbors, class boundaries, or topology.  We also train a fresh model for every corpus,
+target width, and seed, so the experiments do not assume a universal reusable encoder.
 
-This computational distinction does not imply that reconstruction preserves the geometry
-needed by a particular application.  The central empirical question is therefore not
-whether one method has a universally better score, but which structure each objective
-retains.
+\subsection{UMAP: a fuzzy weighted-neighbor objective}
+
+UMAP constructs a weighted graph by assigning a locally adapted scale to every
+observation \cite{umap}.  Let $\mathcal N_i$ contain the $k$ nearest neighbors of
+$x_i$, let $d_{ij}$ denote their input-space distance, and let $\rho_i$ be the distance
+to the nearest neighbor.  UMAP chooses $\sigma_i>0$ so that the fuzzy cardinality is
+approximately $\log_2 k$, then defines the directed membership
+\begin{equation}
+ p_{j\mid i}
+ =\exp\!\left[-\frac{\max(0,d_{ij}-\rho_i)}{\sigma_i}\right],
+ \qquad j\in\mathcal N_i.
+ \label{eq:umap-directed}
+\end{equation}
+
+Membership is zero outside the computed neighborhood.  The probabilistic fuzzy union is
+\begin{equation}
+ p_{ij}=p_{j\mid i}+p_{i\mid j}-p_{j\mid i}p_{i\mid j}.
+ \label{eq:umap-union}
+\end{equation}
+
+This turns the directed neighborhoods into a symmetric weighted graph.  Local rescaling
+is the defining distinction from an ordinary unweighted $k$-NN graph: equal ambient
+distances can receive different memberships in dense and sparse regions.
+
+For candidate coordinates $y_i$, UMAP models low-dimensional membership by
+\begin{equation}
+ q_{ij}=\left(1+a\|y_i-y_j\|_2^{2b}\right)^{-1}.
+ \label{eq:umap-low-membership}
+\end{equation}
+
+Parameters $a$ and $b$ are fitted from \texttt{min\_dist} and \texttt{spread}.  The
+formal layout objective is fuzzy-set cross-entropy,
+\begin{equation}
+ C_{\mathrm{UMAP}}
+ =\sum_{i\ne j}
+ \left[
+ p_{ij}\log\frac{p_{ij}}{q_{ij}}
+ +(1-p_{ij})\log\frac{1-p_{ij}}{1-q_{ij}}
+ \right].
+ \label{eq:umap-cross-entropy}
+\end{equation}
+
+The first optimized term attracts graph edges, whereas the second repels pairs that should not
+be edges.  Enumerating every non-edge would restore quadratic work, so the practical
+algorithm samples positive edges according to their membership and uses negative
+sampling for repulsion.  A spectral embedding of the fuzzy graph supplies the usual
+initial coordinates, after which a linearly cooled stochastic optimizer refines them.
+
+Our implementation is the GPU UMAP in RAPIDS cuML 26.06
+\cite{cuml2606}.  It uses Euclidean input distance, \texttt{min\_dist}$=0.1$,
+\texttt{spread}$=1$, the default five negative samples per positive, and 200 epochs for
+these large inputs.  The text and single-cell comparisons use spectral initialization
+and force the serial-epoch kernel, which cuML documents as the stable seeded path for
+that initialization.  Deep1B instead uses random initialization and cuML's automatic
+epoch-kernel choice.  The neighbor builder is also experiment-specific.  The arXiv and
+Wikipedia runs request
+\texttt{build\_algo=auto} with a fixed \texttt{random\_state}, and cuML 26.06 resolves that
+combination to exact brute-force $k$-NN.  The Tabula Sapiens and Deep1B runs explicitly
+request cuVS NN-descent \cite{nndescent,cuvs2606}.  In those arms, NN-descent avoids an
+all-pairs search by iteratively improving a candidate neighbor graph, at the cost of an
+additional accuracy and nondeterminism control.
+
+\subsection{DiRe: direct forces on a neighbor graph}
+
+DiRe is a three-stage reducer \cite{dire,direrapids}.  It constructs a $k$-NN graph, initializes
+low-dimensional coordinates by PCA, a spectral method, or a random projection, and then
+applies a force-directed layout.  The experiments here use PCA initialization.  Unlike
+UMAP's fuzzy union, the tested PyTorch/RAPIDS layout uses the neighbor indices as an
+unweighted attraction graph: input-space distances select the neighbors, but do not
+weight their subsequent attractive forces.
+
+The operational force law is useful for understanding both the method and its speed.
+At layout iteration $t$, set
+$r_{ij}=\|y_j-y_i\|_2$ and
+$u_{ij}=(y_j-y_i)/(r_{ij}+\varepsilon)$.
+For neighbor set $\mathcal N_i$ and a fresh uniform negative sample
+$\mathcal S_i^{(t)}$, the implementation computes
+\begin{align}
+ A(r)&=\frac{r^{2b}}{r^{2b}+a},
+ &
+ R(r)&=\frac{\exp(-r/c)}{1+a r^{2b}},
+ \label{eq:dire-kernels}\\
+ F_i^{(t)}
+ &=\sum_{j\in\mathcal N_i}A(r_{ij})u_{ij}
+   -\sum_{s\in\mathcal S_i^{(t)}}R(r_{is})u_{is},
+ &
+ y_i^{(t+1)}
+ &=y_i^{(t)}
+   +\left(1-\frac{t}{T}\right)\operatorname{clip}_c(F_i^{(t)}).
+ \label{eq:dire-update}
+\end{align}
+As in UMAP, $a$ and $b$ are fitted from \texttt{min\_dist} and
+\texttt{spread}.  The exponential factor and componentwise clipping bound distant
+repulsion and individual updates.  The default negative-sample ratio is eight per
+neighbor, and the completed layouts use $T=128$ iterations.  Thus, once the graph
+exists, a fixed-$k$ layout iteration has $O(Nk(1+\gamma)d)$ arithmetic for negative
+ratio $\gamma$, with no all-pairs layout force.
+
+The \texttt{dire-rapids} implementation builds neighbors with cuVS and evaluates the
+layout in vectorized PyTorch.  Its fused force kernel uses BF16 for the gather-heavy
+force calculation, accumulates positions in FP32, and falls back to chunked evaluation
+if the full vectorized step does not fit.  The text runs use the 0.3.1 index-search
+path, which selected IVF-PQ for arXiv and IVF-Flat for Wikipedia.  The single-cell arm
+uses the API-compatible 0.3.2 development path and cuVS all-neighbors NN-descent.
+The working-degree audit below tests whether that newer graph builder changes downstream
+quality.
+
+UMAP and DiRe therefore share a family resemblance, not an objective.  Both attract
+neighbors and approximate broad repulsion with negative samples.  UMAP first converts
+distances into an edge-weighted fuzzy union and samples those edges while optimizing
+cross-entropy.  DiRe applies a direct, synchronous bounded force to every stored
+neighbor at every iteration.  Neither implementation optimizes a persistence loss.
+DiRe's topology-preservation motivation is evaluated here as an empirical question,
+using the same sampled persistence diagnostics applied to all methods.
+
+\subsection{Questions addressed by the experiments}
+
+The study asks four linked questions:
+\begin{enumerate}[label=(\roman*)]
+  \item Which objective best preserves local neighborhoods, sampled global distances,
+        local decodability, labels or groups, and sampled topology at $d=2$ and $d=8$?
+  \item How do synchronized fit time and measured memory change from medium corpora to
+        10-million- and 100-million-row Deep1B prefixes?
+  \item Does the autoencoder reconstruction elbow give an intrinsic-dimension estimate
+        comparable to local TwoNN and maximum-likelihood estimators?
+  \item Are the conclusions sensitive to BF16 training, autoencoder exposure and
+        training-pool size, or DiRe NN-descent working degree?
+\end{enumerate}
+The next section fixes the data and implementations.  We then define every metric before
+reporting results, so a method is not declared successful merely because it optimizes a
+related quantity.  The conclusion separates completed empirical comparisons from
+systems observations and from hypotheses that would require further experiments.
 
 \section{Data, reducers, and protocol}
 
@@ -166,15 +360,8 @@ parameter.  The comparisons are transductive: every reported layout is fitted on
 full corpus being evaluated.
 
 \paragraph{Autoencoder.}
-For encoder $f_\theta$ and decoder $g_\phi$, training minimizes only elementwise
-reconstruction MSE,
-\begin{equation}
-  \mathcal{L}(\theta,\phi)
-  =\frac{1}{ND}\sum_{i=1}^{N}
-    \left\|x_i-g_\phi\!\left(f_\theta(x_i)\right)\right\|_2^2.
-  \label{eq:ae-loss}
-\end{equation}
-There is no label, pairwise-distance, neighborhood, contrastive, or topology term.
+Training minimizes only the elementwise reconstruction MSE in
+Eq.~\eqref{eq:ae-loss}.
 Hidden layers use SiLU activations; bottleneck and output layers are linear.  The
 architectures are
 \[
@@ -209,7 +396,9 @@ implementation; under its automatic RAPIDS 26.06 path, cuVS all-neighbors NN-des
 constructs the graph with PCA initialization and the same 128 layout iterations.  Exact
 development identifiers remain in the machine-readable experiment record rather than
 the public narrative.  cuML UMAP 26.06 uses Euclidean distance, spectral initialization,
-\texttt{min\_dist}$=0.1$, \texttt{spread}$=1$, and NN-descent graph construction.
+\texttt{min\_dist}$=0.1$, and \texttt{spread}$=1$.  The seeded text runs request
+\texttt{build\_algo=auto}, which resolves to brute-force $k$-NN in this cuML release;
+the single-cell and Deep1B arms explicitly request NN-descent.
 Native UMAP inverse transformation is disabled because its CPU Delaunay stage is not a
 scale-safe operation for these corpora.
 
@@ -984,8 +1173,10 @@ Table~\ref{tab:timing} use no mixed precision and include both the validation-se
 model and the fresh full-data model.
 
 These are implementation measurements on a GH200, not hardware-independent complexity
-constants.  The graph reducers also avoid quadratic behavior, but do so through
-approximate indexing and sparse operations rather than dense GEMMs.
+constants.  Both graph reducers use sparse $O(Nk)$ layout state, but graph construction
+is a separate cost.  The seeded text UMAP runs use exact brute-force search, whereas
+DiRe and the larger UMAP arms use approximate indices; their timing therefore combines
+different search and layout kernels rather than one universal graph-method complexity.
 
 \subsection{Deep1B scaling: bounded autoencoder state through 100 million rows}
 
@@ -1414,18 +1605,45 @@ run-harness identities; live convenience harnesses may evolve independently.
 \bibitem{hinton2006}
 G.~E. Hinton and R.~R. Salakhutdinov,
 ``Reducing the dimensionality of data with neural networks,''
-\emph{Science} 313 (2006), 504--507.
+\emph{Science} 313 (2006), 504--507,
+\url{https://doi.org/10.1126/science.1127647}.
 
 \bibitem{umap}
 L. McInnes, J. Healy, and J. Melville,
 ``UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction,''
-arXiv:1802.03426 (2018).
+arXiv:1802.03426 (2018),
+\url{https://doi.org/10.48550/arXiv.1802.03426}.
 
 \bibitem{dire}
 A. Kolpakov and I. Rivin,
 ``Dimensionality reduction for homological stability and global structure preservation,''
 arXiv:2503.03156 (2025),
 \url{https://doi.org/10.48550/arXiv.2503.03156}.
+
+\bibitem{direrapids}
+A. Kolpakov and I. Rivin,
+\emph{dire-rapids: PyTorch and RAPIDS accelerated dimensionality reduction},
+software repository (2026),
+\url{https://github.com/sashakolpakov/dire-rapids}.
+
+\bibitem{nndescent}
+W. Dong, C. Moses, and K. Li,
+``Efficient $k$-nearest neighbor graph construction for generic similarity measures,''
+in \emph{Proceedings of the 20th International Conference on World Wide Web}
+(2011), pp. 577--586,
+\url{https://doi.org/10.1145/1963405.1963487}.
+
+\bibitem{cuml2606}
+RAPIDS cuML Developers,
+\emph{UMAP API documentation, cuML 26.06},
+\url{https://docs.rapids.ai/api/cuml/stable/api/generated/cuml.manifold.umap/}
+(accessed July 2026).
+
+\bibitem{cuvs2606}
+RAPIDS cuVS Developers,
+\emph{All-neighbors and NN-descent API documentation, cuVS 26.06},
+\url{https://docs.rapids.ai/api/cuvs/stable/python_api/neighbors_all_neighbors/}
+(accessed July 2026).
 
 \bibitem{facco2017}
 E. Facco, M. d'Errico, A. Rodriguez, and A. Laio,
